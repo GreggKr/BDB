@@ -1,6 +1,8 @@
 package me.greggkr.bdb.handlers
 
 import me.diax.comportment.jdacommand.CommandHandler
+import me.greggkr.bdb.data
+import net.dv8tion.jda.core.Permission
 import net.dv8tion.jda.core.entities.ChannelType
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent
 import net.dv8tion.jda.core.hooks.ListenerAdapter
@@ -25,6 +27,13 @@ class CommandHandler(private val handler: CommandHandler) : ListenerAdapter() {
         val trigger = args[0].substring(prefix.length)
 
         val cmd = handler.findCommand(trigger.toLowerCase()) ?: return
+
+        val user = e.author
+        val member = e.member
+
+        if (cmd.hasAttribute("adminOnly")) {
+            if (!member.isOwner && !data.isOwner(user) && !member.hasPermission(Permission.MANAGE_SERVER)) return
+        }
 
         handler.execute(cmd, e.message, if (args.size > 1) args[1] else "")
     }

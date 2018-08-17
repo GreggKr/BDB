@@ -1,6 +1,7 @@
 package me.greggkr.bdb.util
 
 import me.diax.comportment.jdacommand.Command
+import me.greggkr.bdb.commands.admin.SettingsCommand
 import me.greggkr.bdb.commands.info.AboutCommand
 
 object CommandRegistry {
@@ -8,6 +9,9 @@ object CommandRegistry {
 
     init {
         register(
+                /* ADMIN */
+                SettingsCommand(),
+                
                 /* INFO */
                 AboutCommand()
         )
