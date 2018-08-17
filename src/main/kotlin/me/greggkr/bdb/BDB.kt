@@ -2,6 +2,7 @@ package me.greggkr.bdb
 
 import com.natpryce.konfig.ConfigurationProperties
 import me.diax.comportment.jdacommand.CommandHandler
+import me.greggkr.bdb.handlers.ModLogHandler
 import me.greggkr.bdb.util.CommandRegistry
 import me.greggkr.bdb.util.Config
 import me.greggkr.bdb.util.db.Data
@@ -28,6 +29,6 @@ fun main(args: Array<String>) {
 
     JDABuilder(AccountType.BOT)
             .setToken(config[Config.Bot.token])
-            .addEventListener(me.greggkr.bdb.handlers.CommandHandler(handler))
+            .addEventListener(me.greggkr.bdb.handlers.CommandHandler(handler), ModLogHandler())
             .buildBlocking()
 }

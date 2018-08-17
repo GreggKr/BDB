@@ -11,7 +11,7 @@ object CommandRegistry {
         register(
                 /* ADMIN */
                 SettingsCommand(),
-                
+
                 /* INFO */
                 AboutCommand()
         )
