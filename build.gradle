@@ -1,16 +1,61 @@
+buildscript {
+    ext.kotlin_version = '1.2.60'
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    }
+}
+
+
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.2.60'
+    id 'com.github.johnrengelman.shadow' version '2.0.2'
+
 }
+
+apply plugin: 'kotlin'
 
 group 'me.greggkr.bdb'
 version '1.0'
 
 repositories {
     mavenCentral()
+
+    jcenter()
+
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: '1.2.31'
+
+    compile "net.dv8tion:JDA:3.6.0_354"
+    compile 'com.jagrosh:jda-utilities:2.1'
+    compile "com.github.Comportment:JDA-Command:1.1.1"
+
+    compile "ch.qos.logback:logback-classic:1.2.3"
+    compile "com.natpryce:konfig:1.6.1.0"
+    compile "com.google.code.gson:gson:2.8.2"
+
+    compile "com.github.dblock:oshi-json:3.4.0"
+
+    compile "com.mashape.unirest:unirest-java:1.4.9"
+
+    compile 'org.mongodb:mongodb-driver:3.6.3'
+    compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.4.14'
+}
+
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'me.greggkr.bdb.BDBKt',
+                'Implementation-Version': project.version
+    }
 }
 
 compileKotlin {
