@@ -38,6 +38,15 @@ class Database(user: String,
         saveField(id, "modlogchannels", Document().append("channel", channel))
     }
 
+    fun getColor(id: String): String? {
+        val doc = getDoc(id, "colors")
+        return if (doc == null) null else doc["color"] as String
+    }
+
+    fun setColor(id: String, color: String) {
+        saveField(id, "colors", Document().append("color", color))
+    }
+
     private fun getDoc(id: String, collection: String): Document? {
         return database.getCollection(collection).find(Filters.eq("_id", id)).firstOrNull()
     }

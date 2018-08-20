@@ -42,10 +42,6 @@ dependencies {
     compile "com.natpryce:konfig:1.6.1.0"
     compile "com.google.code.gson:gson:2.8.2"
 
-    compile "com.github.dblock:oshi-json:3.4.0"
-
-    compile "com.mashape.unirest:unirest-java:1.4.9"
-
     compile 'org.mongodb:mongodb-driver:3.6.3'
     compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.4.14'
 }

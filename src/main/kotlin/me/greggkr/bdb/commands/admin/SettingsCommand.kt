@@ -5,10 +5,12 @@ import me.diax.comportment.jdacommand.CommandAttribute
 import me.diax.comportment.jdacommand.CommandDescription
 import me.greggkr.bdb.data
 import me.greggkr.bdb.util.Emoji
+import me.greggkr.bdb.util.toHex
 import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.entities.Message
 import net.dv8tion.jda.core.entities.MessageChannel
 import net.dv8tion.jda.core.entities.TextChannel
+import java.awt.Color
 
 @CommandDescription(name = "settings", triggers = [
     "settings", "s"
@@ -45,6 +47,29 @@ class SettingsCommand : Command {
                 return
             }
 
+            "color" -> {
+                if (a.size < 2) { // 0 -> color, 1 -> color
+                    channel.sendMessage("Current color: `${data.getColor(guild).toHex()}").queue()
+                    return
+                }
+
+                try {
+                    val color = Color.decode(a[1])
+
+                    if (color == null) {
+                        channel.sendMessage("${Emoji.X} Invalid color.").queue()
+                        return
+                    }
+
+                    data.setColor(guild, color)
+                    channel.sendMessage("${Emoji.WHITE_CHECK_MARK} Set color to `${color.toHex()}`.").queue()
+                } catch (e: NumberFormatException) {
+                    channel.sendMessage("${Emoji.X} Correct Usage: ${data.getPrefix(guild)}settings color <hex color>.").queue()
+                }
+
+                return
+            }
+
             else -> {
                 sendSettings(channel)
                 return
@@ -54,8 +79,10 @@ class SettingsCommand : Command {
 
     private fun sendSettings(channel: MessageChannel) {
         val guild = (channel as TextChannel).guild
+        val color = data.getColor(guild)
 
         channel.sendMessage(EmbedBuilder()
+                .setColor(color)
                 .addField("Prefix", data.getPrefix(guild), true)
                 .addField("Mod Log Channel", data.getModLogChannel(guild)?.asMention ?: "None", true)
                 .build())

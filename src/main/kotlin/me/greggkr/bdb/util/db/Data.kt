@@ -1,11 +1,15 @@
 package me.greggkr.bdb.util.db
 
+import me.greggkr.bdb.util.toHex
 import net.dv8tion.jda.core.entities.Guild
 import net.dv8tion.jda.core.entities.TextChannel
 import net.dv8tion.jda.core.entities.User
+import java.awt.Color
 
 class Data(private val db: Database) {
-    private val defualtPrefix = "!";
+    private val defualtPrefix = "!"
+    private val defaultColor = Color.decode("#934cff")
+
     private val prefixes = HashMap<String, String>()
 
     private val owners = listOf(
@@ -37,5 +41,15 @@ class Data(private val db: Database) {
 
     fun setModLogChannel(guild: Guild, channel: TextChannel) {
         db.setModLogChannel(guild.id, channel.idLong)
+    }
+
+    fun getColor(guild: Guild): Color {
+        val raw = db.getColor(guild.id) ?: return defaultColor
+
+        return Color.decode(raw) ?: defaultColor
+    }
+
+    fun setColor(guild: Guild, color: Color) {
+        db.setColor(guild.id, color.toHex())
     }
 }

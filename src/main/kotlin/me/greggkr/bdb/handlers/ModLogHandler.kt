@@ -1,24 +1,34 @@
 package me.greggkr.bdb.handlers
 
-import me.greggkr.bdb.data
-import net.dv8tion.jda.core.EmbedBuilder
-import net.dv8tion.jda.core.entities.Guild
+import me.greggkr.bdb.util.Logger
+import me.greggkr.bdb.util.prettyString
+import net.dv8tion.jda.core.entities.Message
 import net.dv8tion.jda.core.events.message.guild.GuildMessageDeleteEvent
+import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
+import net.dv8tion.jda.core.events.message.guild.GuildMessageUpdateEvent
 import net.dv8tion.jda.core.hooks.ListenerAdapter
-import java.time.OffsetDateTime
 
 class ModLogHandler : ListenerAdapter() {
+    private val cached = ArrayList<Message>()
+
+    override fun onGuildMessageReceived(e: GuildMessageReceivedEvent) {
+        cached.add(e.message)
+    }
+
     override fun onGuildMessageDelete(e: GuildMessageDeleteEvent) {
-        sendModLogMessage(e.guild, "deleted a msg")
+        val msg = getCachedMessage(e.messageIdLong) ?: return
+        Logger.logMessage(e.guild, "Message Deleted", msg.author.effectiveAvatarUrl, "Message by ${msg.author.prettyString()}", "Deleted Message:\n${msg.contentRaw}")
+
+        cached.remove(msg)
     }
 
-    // TODO: make pretty
-    private fun sendModLogMessage(guild: Guild, message: String) {
-        val channel = data.getModLogChannel(guild) ?: return
+    override fun onGuildMessageUpdate(e: GuildMessageUpdateEvent) {
+        val msg = getCachedMessage(e.messageIdLong) ?: return
+        Logger.logMessage(e.guild, "Message Edited", msg.author.effectiveAvatarUrl, "Message by ${msg.author.prettyString()}", "Original Message:\n${msg.contentRaw}\n\nUpdated Message:\n${e.message.contentRaw}")
 
-        channel.sendMessage(EmbedBuilder()
-                .setDescription(message)
-                .setTimestamp(OffsetDateTime.now())
-                .build()).queue()
+        cached.remove(msg)
+        cached.add(e.message)
     }
+
+    private fun getCachedMessage(id: Long) = cached.find { it.idLong == id }
 }
