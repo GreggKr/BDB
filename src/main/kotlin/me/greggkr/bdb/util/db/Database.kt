@@ -47,6 +47,25 @@ class Database(user: String,
         saveField(id, "colors", Document().append("color", color))
     }
 
+    fun getLogTypeEnabled(id: String, type: String): Boolean? {
+        val doc = getDoc(id, "log_types")
+        return if (doc == null) null else doc[type] as Boolean?
+    }
+
+    fun setLogTypeEnabled(id: String, type: String, enabled: Boolean) {
+        val doc = getDoc(id, "log_types") ?: Document()
+        saveField(id, "log_types", doc.append(type, enabled))
+    }
+
+    fun getModRole(id: String): String? {
+        val doc = getDoc(id, "mod_roles") ?: return null
+        return doc["role"] as String?
+    }
+
+    fun setModRole(id: String, role: String) {
+        saveField(id, "mod_roles", Document().append("role", role))
+    }
+
     private fun getDoc(id: String, collection: String): Document? {
         return database.getCollection(collection).find(Filters.eq("_id", id)).firstOrNull()
     }

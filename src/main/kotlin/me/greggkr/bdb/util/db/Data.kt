@@ -1,7 +1,9 @@
 package me.greggkr.bdb.util.db
 
+import me.greggkr.bdb.util.logging.LogType
 import me.greggkr.bdb.util.toHex
 import net.dv8tion.jda.core.entities.Guild
+import net.dv8tion.jda.core.entities.Role
 import net.dv8tion.jda.core.entities.TextChannel
 import net.dv8tion.jda.core.entities.User
 import java.awt.Color
@@ -51,5 +53,22 @@ class Data(private val db: Database) {
 
     fun setColor(guild: Guild, color: Color) {
         db.setColor(guild.id, color.toHex())
+    }
+
+    fun getLogTypeEnabled(guild: Guild, type: LogType): Boolean {
+        return db.getLogTypeEnabled(guild.id, type.name) ?: false
+    }
+
+    fun setLogTypeEnabled(guild: Guild, type: LogType, enabled: Boolean) {
+        db.setLogTypeEnabled(guild.id, type.name, enabled)
+    }
+
+    fun getModRole(guild: Guild): Role? {
+        val id = db.getModRole(guild.id) ?: return null
+        return guild.getRoleById(id)
+    }
+
+    fun setModRole(guild: Guild, role: Role) {
+        db.setModRole(guild.id, role.id)
     }
 }

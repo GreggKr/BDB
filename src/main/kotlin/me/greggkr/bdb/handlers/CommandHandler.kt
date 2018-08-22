@@ -14,9 +14,10 @@ class CommandHandler(private val handler: CommandHandler) : ListenerAdapter() {
         val channel = e.channel
         val msg = e.message
         val content = msg.contentRaw
+        val guild = e.guild
 
         val prefix = "!" // TODO: replace with config value
-        if (content == e.guild.selfMember.asMention) {
+        if (content == guild.selfMember.asMention) {
             channel.sendMessage("My prefix here is: `$prefix`.").queue()
             return
         }
@@ -33,6 +34,15 @@ class CommandHandler(private val handler: CommandHandler) : ListenerAdapter() {
 
         if (cmd.hasAttribute("adminOnly")) {
             if (!member.isOwner && !data.isOwner(user) && !member.hasPermission(Permission.MANAGE_SERVER)) return
+        }
+
+        if (cmd.hasAttribute("modOnly")) {
+            val role = data.getModRole(guild)
+            if (role != null) {
+                if (!member.isOwner && !data.isOwner(user) && !member.roles.contains(role)) return
+            } else {
+                if (!member.isOwner && !data.isOwner(user)) return
+            }
         }
 
         handler.execute(cmd, e.message, if (args.size > 1) args[1] else "")
