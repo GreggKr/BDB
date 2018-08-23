@@ -32,6 +32,10 @@ class CommandHandler(private val handler: CommandHandler) : ListenerAdapter() {
         val user = e.author
         val member = e.member
 
+        if (cmd.hasAttribute("botOwnerOnly")) {
+            if (!data.isOwner(user)) return
+        }
+
         if (cmd.hasAttribute("adminOnly")) {
             if (!member.isOwner && !data.isOwner(user) && !member.hasPermission(Permission.MANAGE_SERVER)) return
         }

@@ -14,8 +14,8 @@ import net.dv8tion.jda.core.entities.Message
     "kick"
 ], attributes = [
     CommandAttribute(key = "modOnly")
-], description = "Allows you to kick people.")
-class KickCommand : Command {
+], description = "Allows you to ban people.")
+class BanCommand : Command {
     override fun execute(message: Message, args: String) {
         val guild = message.guild
         val channel = message.channel
@@ -23,19 +23,19 @@ class KickCommand : Command {
         val a = args.split(Regex("\\s+\\|\\s+"))
 
         if (a[0].isEmpty()) {
-            channel.sendMessage("${Emoji.X} Correct Usage: ${data.getPrefix(guild)}kick <user> | <reason>").queue()
+            channel.sendMessage("${Emoji.X} Correct Usage: ${data.getPrefix(guild)}ban <user> | <reason>").queue()
             return
         }
 
         val self = message.guild.selfMember
         val member = message.member
-        if (!self.hasPermission(Permission.KICK_MEMBERS)) {
-            channel.sendMessage("${Emoji.X} I do not have permission to do this. I need the following permission: KICK_MEMBERS.").queue()
+        if (!self.hasPermission(Permission.BAN_MEMBERS)) {
+            channel.sendMessage("${Emoji.X} I do not have permission to do this. I need the following permission: BAN_MEMBERS.").queue()
             return
         }
 
         if (!self.canInteract(member)) {
-            channel.sendMessage("${Emoji.X} I cannot kick that person.").queue()
+            channel.sendMessage("${Emoji.X} I cannot ban that person.").queue()
             return
         }
 
@@ -48,11 +48,11 @@ class KickCommand : Command {
         val reason = if (a.size > 1) a[1] else "No reason specified."
 
         val user = users[0]
-        guild.controller.kick(user.id, reason).queue({
-            channel.sendMessage("${Emoji.WHITE_CHECK_MARK} Kicked ${user.asMention} for `$reason`.").queue()
-            Logger.logMessage(guild, "Member Kicked", user.effectiveAvatarUrl, "Kicked by bot", "Kicked: ${user.asMention}\nModerator: ${message.author.asMention}")
+        guild.controller.ban(user.id, 0, reason).queue({
+            channel.sendMessage("${Emoji.WHITE_CHECK_MARK} Banned ${user.asMention} for `$reason`.").queue()
+            Logger.logMessage(guild, "Member Banned", user.effectiveAvatarUrl, "Banned by bot", "Banned: ${user.asMention}\nModerator: ${message.author.asMention}")
         }, {
-            channel.sendMessage("${Emoji.X} Failed to kick ${user.asMention}").queue()
+            channel.sendMessage("${Emoji.X} Failed to ban ${user.asMention}").queue()
         })
     }
 }
