@@ -9,6 +9,7 @@ import me.greggkr.bdb.util.db.Data
 import me.greggkr.bdb.util.db.Database
 import net.dv8tion.jda.core.AccountType
 import net.dv8tion.jda.core.JDABuilder
+import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
 import java.io.File
 
 typealias JDACCommandHandler = CommandHandler
@@ -25,6 +26,8 @@ val data = Data(Database(
 ))
 
 fun main(args: Array<String>) {
+    setIdeaIoUseFallback()
+
     handler.registerCommands(CommandRegistry.commands)
 
     JDABuilder(AccountType.BOT)

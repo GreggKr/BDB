@@ -16,7 +16,7 @@ class CommandHandler(private val handler: CommandHandler) : ListenerAdapter() {
         val content = msg.contentRaw
         val guild = e.guild
 
-        val prefix = "!" // TODO: replace with config value
+        val prefix = data.getPrefix(guild) // TODO: replace with config value
         if (content == guild.selfMember.asMention) {
             channel.sendMessage("My prefix here is: `$prefix`.").queue()
             return

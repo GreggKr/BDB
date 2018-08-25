@@ -14,7 +14,6 @@ buildscript {
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.2.60'
     id 'com.github.johnrengelman.shadow' version '2.0.2'
-
 }
 
 apply plugin: 'kotlin'
@@ -32,12 +31,12 @@ repositories {
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    compile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: '1.2.31'
+    compile 'org.jetbrains.kotlin:kotlin-reflect:1.2.31'
 
     compile "org.jetbrains.kotlin:kotlin-compiler:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-script-util:$kotlin_version"
 
-    compile "net.dv8tion:JDA:3.6.0_354"
+    compile "net.dv8tion:JDA:3.7.1_400"
     compile 'com.jagrosh:jda-utilities:2.1.4'
     compile "com.github.Comportment:JDA-Command:1.1.1"
 
@@ -46,7 +45,7 @@ dependencies {
     compile "com.google.code.gson:gson:2.8.2"
 
     compile 'org.mongodb:mongodb-driver:3.6.3'
-    compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.4.14'
+    compile 'org.codehaus.groovy:groovy-all:2.4.14'
 }
 
 
