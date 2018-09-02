@@ -5,12 +5,18 @@ import me.greggkr.bdb.util.logging.LogType
 import me.greggkr.bdb.util.logging.Logger
 import me.greggkr.bdb.util.prettyString
 import net.dv8tion.jda.core.entities.Message
+import net.dv8tion.jda.core.events.channel.category.CategoryCreateEvent
+import net.dv8tion.jda.core.events.channel.category.CategoryDeleteEvent
+import net.dv8tion.jda.core.events.channel.text.TextChannelCreateEvent
+import net.dv8tion.jda.core.events.channel.text.TextChannelDeleteEvent
+import net.dv8tion.jda.core.events.channel.text.update.*
 import net.dv8tion.jda.core.events.guild.member.*
 import net.dv8tion.jda.core.events.guild.update.*
 import net.dv8tion.jda.core.events.message.guild.GuildMessageDeleteEvent
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.core.events.message.guild.GuildMessageUpdateEvent
 import net.dv8tion.jda.core.hooks.ListenerAdapter
+import java.util.*
 
 class ModLogHandler : ListenerAdapter() {
     private val cached = ArrayList<Message>()
@@ -22,17 +28,26 @@ class ModLogHandler : ListenerAdapter() {
     override fun onGuildMessageDelete(e: GuildMessageDeleteEvent) {
         if (!data.getLogTypeEnabled(e.guild, LogType.GUILD_MESSAGE_DELETE)) return
         val msg = getCachedMessage(e.messageIdLong) ?: return
-        Logger.logMessage(e.guild, "Message Deleted", msg.author.effectiveAvatarUrl, "Message by `${msg.author.prettyString()}`", "Deleted Message:\n${msg.contentRaw}")
+        Logger.logMessage(e.guild, "Message Deleted", msg.author.effectiveAvatarUrl, "Message by ${msg.author.prettyString()}", "Deleted Message:\n${msg.contentRaw
+                ?: "No text"}")
 
         cached.remove(msg)
     }
 
     override fun onGuildMessageUpdate(e: GuildMessageUpdateEvent) {
-        if (!data.getLogTypeEnabled(e.guild, LogType.GUILD_MESSAGE_EDIT)) return
-        val msg = getCachedMessage(e.messageIdLong) ?: return
-        Logger.logMessage(e.guild, "Message Edited", msg.author.effectiveAvatarUrl, "Message by `${msg.author.prettyString()}`", "Original Message:\n${msg.contentRaw}\n\nUpdated Message:\n${e.message.contentRaw}")
+        val old = getCachedMessage(e.messageIdLong) ?: return
+        val new = e.message
 
-        cached.remove(msg)
+        if (old.contentRaw != new.contentRaw) {
+            if (!data.getLogTypeEnabled(e.guild, LogType.GUILD_MESSAGE_EDIT)) return
+            Logger.logMessage(e.guild, "Message Edited", new.author.effectiveAvatarUrl, "Message by ${new.author.prettyString()}", "Original Message:\n${old.contentRaw
+                    ?: "No text"}\n\nUpdated Message:\n${new.contentRaw ?: "No text"}")
+        } else if (old.isPinned != new.isPinned) {
+            Logger.logMessage(e.guild, "Message ${if (old.isPinned && !new.isPinned) "Unp" else "P"}inned", new.author.effectiveAvatarUrl, "Message by ${new.author.prettyString()}", "Message:\n${old.contentRaw
+                    ?: "No text"}\n${if (old.isPinned && !new.isPinned) "Unp" else "P"}inned in:${e.channel.asMention}")
+        }
+
+        cached.remove(old)
         cached.add(e.message)
     }
 
@@ -44,7 +59,7 @@ class ModLogHandler : ListenerAdapter() {
     }
 
     override fun onGuildMemberLeave(e: GuildMemberLeaveEvent) {
-        if (!data.getLogTypeEnabled(e.guild, LogType.GUILD_MEMBER_LEVEL)) return
+        if (!data.getLogTypeEnabled(e.guild, LogType.GUILD_MEMBER_LEAVE)) return
 
         val user = e.user
         Logger.logMessage(e.guild, "Member Left", user.effectiveAvatarUrl, description = "`${user.prettyString()}` left.")
@@ -150,6 +165,70 @@ class ModLogHandler : ListenerAdapter() {
         if (!data.getLogTypeEnabled(e.guild, LogType.GUILD_UPDATE)) return
 
         Logger.logMessage(e.guild, "Updated AFK Channel", description = "Changed AFK Channel.\nOld: `${e.oldVerificationLevel.name}`\nNew: `${e.newVerificationLevel.name}`.")
+    }
+
+    override fun onCategoryCreate(e: CategoryCreateEvent) {
+        if (!data.getLogTypeEnabled(e.guild, LogType.GUILD_CATEGORY_CREATE)) return
+
+        Logger.logMessage(e.guild, "Created Category", description = "Category: ${e.category.name}.")
+    }
+
+    override fun onCategoryDelete(e: CategoryDeleteEvent) {
+        if (!data.getLogTypeEnabled(e.guild, LogType.GUILD_CATEGORY_DELETE)) return
+
+        Logger.logMessage(e.guild, "Deleted Category", description = "Category: ${e.category.name}.")
+    }
+
+    override fun onTextChannelCreate(e: TextChannelCreateEvent) {
+        if (!data.getLogTypeEnabled(e.guild, LogType.GUILD_TEXTCHANNEL_CREATE)) return
+
+        Logger.logMessage(e.guild, "Created Text Channel", description = "Channel: ${e.channel.asMention}\nCategory: ${e.channel.parent?.name
+                ?: "None"}.")
+    }
+
+    override fun onTextChannelDelete(e: TextChannelDeleteEvent) {
+        if (!data.getLogTypeEnabled(e.guild, LogType.GUILD_TEXTCHANNEL_DELETE)) return
+
+        Logger.logMessage(e.guild, "Created Text Channel", description = "Channel: ${e.channel.asMention}\nCategory: ${e.channel.parent?.name
+                ?: "None"}.")
+    }
+
+    override fun onTextChannelUpdateNSFW(e: TextChannelUpdateNSFWEvent) {
+        if (!data.getLogTypeEnabled(e.guild, LogType.GUILD_TEXTCHANNEL_UPDATE)) return
+
+        Logger.logMessage(e.guild, "Updated Text Channel (NSFW)", description = "Old: ${e.oldNSFW}\nNew: ${e.newValue}.")
+    }
+
+    override fun onTextChannelUpdateName(e: TextChannelUpdateNameEvent) {
+        if (!data.getLogTypeEnabled(e.guild, LogType.GUILD_TEXTCHANNEL_UPDATE)) return
+
+        Logger.logMessage(e.guild, "Updated Text Channel (Name)", description = "Old: ${e.oldName}\nNew: ${e.newName}.")
+
+    }
+
+    override fun onTextChannelUpdateParent(e: TextChannelUpdateParentEvent) {
+        if (!data.getLogTypeEnabled(e.guild, LogType.GUILD_TEXTCHANNEL_UPDATE)) return
+
+        Logger.logMessage(e.guild, "Updated Text Channel (Category)", description = "Old: ${e.oldParent?.name
+                ?: "None"}\nNew: ${e.newParent?.name ?: "None"}.")
+    }
+
+    override fun onTextChannelUpdatePermissions(e: TextChannelUpdatePermissionsEvent) {
+        if (!data.getLogTypeEnabled(e.guild, LogType.GUILD_TEXTCHANNEL_UPDATE)) return
+
+        Logger.logMessage(e.guild, "Updated Text Channel (Permissions)", description = "Changed Members: ${e.changedMembers.size}\nChanged Roles: ${e.changedRoles.size}.")
+    }
+
+    override fun onTextChannelUpdatePosition(e: TextChannelUpdatePositionEvent) {
+        if (!data.getLogTypeEnabled(e.guild, LogType.GUILD_TEXTCHANNEL_UPDATE)) return
+
+        Logger.logMessage(e.guild, "Updated Text Channel (Position)", description = "Old: ${e.oldPosition}\nNew: ${e.newPosition}.")
+    }
+
+    override fun onTextChannelUpdateTopic(e: TextChannelUpdateTopicEvent) {
+        if (!data.getLogTypeEnabled(e.guild, LogType.GUILD_TEXTCHANNEL_UPDATE)) return
+
+        Logger.logMessage(e.guild, "Updated Text Channel (Topic)", description = "Old: ${e.oldTopic}\nNew: ${e.newTopic}.")
     }
 
     private fun getCachedMessage(id: Long) = cached.find { it.idLong == id }

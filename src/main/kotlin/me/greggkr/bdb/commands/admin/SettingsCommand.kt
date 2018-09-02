@@ -12,6 +12,7 @@ import net.dv8tion.jda.core.entities.Guild
 import net.dv8tion.jda.core.entities.Message
 import net.dv8tion.jda.core.entities.MessageChannel
 import net.dv8tion.jda.core.entities.TextChannel
+import org.jetbrains.kotlin.cli.common.toBooleanLenient
 import java.awt.Color
 
 @CommandDescription(name = "settings", triggers = [
@@ -68,7 +69,7 @@ class SettingsCommand : Command {
             }
 
             "modlog" -> {
-                if (a.size < 3) { // 0 -> mlt, 1 -> type, 2 -> enabled
+                if (a.size < 2) { // 0 -> modlog, 1 -> other
                     sendModLogHelp(guild, channel)
                     return
                 }
@@ -88,10 +89,36 @@ class SettingsCommand : Command {
                         return
                     }
 
+                    "all" -> {
+                        if (a.size < 4) {
+                            channel.sendMessage("${Emoji.X} Correct Usage: ${data.getPrefix(guild)}settings modlog all <true/false>").queue()
+                            return
+                        }
+                        val enabled = a[3].toBooleanLenient()
+                        if (enabled == null) {
+                            channel.sendMessage("${Emoji.X} Correct Usage: ${data.getPrefix(guild)}settings modlog all <true/false>").queue()
+                            return
+                        }
+
+                        for (type in LogType.values()) {
+                            data.setLogTypeEnabled(guild, type, enabled)
+                        }
+                    }
+
                     else -> {
+                        if (a.size < 3) { // 0 -> modlog, 1 -> type, 2 -> enabled
+                            channel.sendMessage("${Emoji.X} Correct Usage: ${data.getPrefix(guild)}settings modlog <type> <true/false>").queue()
+                            return
+                        }
+
                         try {
                             val type = LogType.valueOf(a[1].toUpperCase())
-                            val enabled = a[2].toBoolean()
+                            val enabled = a[2].toBooleanLenient()
+
+                            if (enabled == null) {
+                                channel.sendMessage("${Emoji.X} Correct Usage: ${data.getPrefix(guild)}settings modlog <type> <true/false>").queue()
+                                return
+                            }
 
                             data.setLogTypeEnabled(guild, type, enabled)
 

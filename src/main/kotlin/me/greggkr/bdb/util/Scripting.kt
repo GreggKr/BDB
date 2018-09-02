@@ -9,7 +9,6 @@ fun evalImports(imports: List<String>) {
 }
 
 fun eval(script: String, values: Map<String, Any> = emptyMap()): Any? {
-
     for (e in values) {
         engine.put(e.key, e.value)
     }

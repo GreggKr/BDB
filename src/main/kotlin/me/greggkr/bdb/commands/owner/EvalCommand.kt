@@ -39,9 +39,12 @@ class EvalCommand : Command {
             )
             val res = eval(args, map)
 
-            channel.sendMessage("${res ?: "Returned nothing."}").queue()
+            message.addReaction(Emoji.WHITE_CHECK_MARK.unicode).queue()
+            if (res != null) {
+                channel.sendMessage("$res").queue()
+            }
         } catch (e: ScriptException) {
-            channel.sendMessage("${Emoji.X} Failed to execute.").queue()
+            message.addReaction(Emoji.X.unicode).queue()
             channel.sendMessage("$e").queue()
         }
     }
