@@ -27,16 +27,16 @@ object ScheduledMessager {
     fun start() {
         scheduler.scheduleAtFixedRate({
             val channel = jda.getTextChannelById(CHANNEL_ID) ?: return@scheduleAtFixedRate
-            val members = jda.getGuildById(433997571266969610).members
+            val members = jda.getGuildById(channel.guild.id).members
             val member = members[Random().nextInt(members.size)]
 
-            val user = member.user
+//            val user = member.user
 //            if (user.idLong in special) {
 //                val msgs = special[user.idLong]!!
 //
 //                channel.sendMessage(msgs[Random().nextInt(msgs.size)].replace(PLACEHOLDER, user.asMention)).queue()
 //            } else {
-            channel.sendMessage(messages[Random().nextInt(messages.size)].replace(PLACEHOLDER, user.asMention)).queue()
+            channel.sendMessage(messages[Random().nextInt(messages.size)].replace(PLACEHOLDER, member.asMention)).queue()
 //            }
         }, 0, 5, TimeUnit.SECONDS)
     }
