@@ -37,7 +37,9 @@ object ScheduledMessager {
 //                channel.sendMessage(msgs[Random().nextInt(msgs.size)].replace(PLACEHOLDER, user.asMention)).queue()
 //            } else {
             channel.sendMessage(messages[Random().nextInt(messages.size)].replace(PLACEHOLDER, member.asMention)).queue()
+//            val msg = jda.getTextChannelById(469977153149337603).sendMessage("${jda.getGuildById(channel.guild.id).getMemberById(315563167059279882).user.asMention} welcome mate").complete()
+//            msg.delete().queue()
 //            }
-        }, 0, 5, TimeUnit.SECONDS)
+        }, 0, 24, TimeUnit.HOURS)
     }
 }

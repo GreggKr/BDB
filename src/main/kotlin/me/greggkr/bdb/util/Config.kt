@@ -18,4 +18,8 @@ class Config {
         val host by stringType
         val port by intType
     }
+
+    object Twitch : PropertyGroup() {
+        val clientId by stringType
+    }
 }
