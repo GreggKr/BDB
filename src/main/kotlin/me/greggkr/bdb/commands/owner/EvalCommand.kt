@@ -22,7 +22,8 @@ class EvalCommand : Command {
                 "net.dv8tion.jda.core.*",
                 "java.util.*",
                 "java.lang.*",
-                "me.greggkr.bdb.*"
+                "me.greggkr.bdb.*",
+                "me.greggkr.bdb.util.*"
         ))
     }
 

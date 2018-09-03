@@ -1,8 +1,10 @@
-package me.greggkr.bdb.util
+package me.greggkr.bdb.util.twitch
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import me.greggkr.bdb.config
+import me.greggkr.bdb.util.Config
+import me.greggkr.bdb.util.twitch.`object`.User
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -49,11 +51,37 @@ object Twitch {
         return data[0].asJsonObject["type"].asString == "live"
     }
 
-    private inline fun <reified T> makeRequest(req: Request): T? {
-        val res = CLIENT.newCall(req).execute()
-        val body = res.body() ?: return null
+    fun getUser(user: String): User? {
+        val ret = makeRequest(Request.Builder()
+                .url(baseUrl.newBuilder()
+                        .addPathSegment("users")
+                        .addQueryParameter("login", user)
+                        .build()
+                )
+                .get()
+                .build()) ?: return null
 
-        return gson.fromJson(body.string(), T::class.java)
+        val data = if (ret.has("data") && ret["data"].isJsonArray) ret["data"].asJsonArray else return null
+        if (data.size() == 0) return null
+        return gson.fromJson(data[0].asJsonObject, User::class.java)
+    }
+
+    fun getUsers(users: List<String>): Array<User>? {
+        val urlBuilder = baseUrl.newBuilder()
+                .addPathSegment("users")
+
+        for (user in users) {
+            urlBuilder.addQueryParameter("login", user)
+        }
+
+        val ret = makeRequest(Request.Builder()
+                .url(urlBuilder.build())
+                .get()
+                .build()) ?: return null
+
+        val data = if (ret.has("data") && ret["data"].isJsonArray) ret["data"].asJsonArray else return null
+        if (data.size() == 0) return null
+        return gson.fromJson(data, Array<User>::class.java)
     }
 
     private fun makeRequest(req: Request): JsonObject? {

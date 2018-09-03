@@ -3,9 +3,11 @@ package me.greggkr.bdb.commands.info
 import me.diax.comportment.jdacommand.Command
 import me.diax.comportment.jdacommand.CommandDescription
 import me.greggkr.bdb.util.Emoji
-import me.greggkr.bdb.util.Twitch
+import me.greggkr.bdb.util.Hastebin
+import me.greggkr.bdb.util.twitch.Twitch
 import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.entities.Message
+import java.util.*
 
 @CommandDescription(name = "twitch", triggers = [
     "twitch"
@@ -19,9 +21,14 @@ class TwitchCommand : Command {
             return
         }
 
-        channel.sendMessage(EmbedBuilder()
-                .setDescription("that user is ${if (Twitch.isStreaming(args) == true) "" else "not "} streaming")
-                .build())
-                .queue()
+        val a = args.split(Regex(","))
+
+        val url = if (a.size < 2) {
+            Hastebin.hastebin(Twitch.getUser(a[0]).toString())
+        } else {
+            Hastebin.hastebin(Arrays.deepToString(Twitch.getUsers(a)))
+        }
+
+        channel.sendMessage(url).queue()
     }
 }
