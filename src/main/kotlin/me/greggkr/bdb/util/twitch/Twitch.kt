@@ -46,8 +46,8 @@ object Twitch {
                 .get()
                 .build()) ?: return null
 
-        val data = if (ret.has("data") && ret["data"].isJsonArray) ret["data"].asJsonArray else return null
-        if (data.size() == 0) return null
+        val data = if (ret.has("data") && ret["data"].isJsonArray) ret["data"].asJsonArray else return false
+        if (data.size() == 0) return false
         return data[0].asJsonObject["type"].asString == "live"
     }
 
@@ -82,6 +82,34 @@ object Twitch {
         val data = if (ret.has("data") && ret["data"].isJsonArray) ret["data"].asJsonArray else return null
         if (data.size() == 0) return null
         return gson.fromJson(data, Array<User>::class.java)
+    }
+
+    /**
+     * @param streamer the username of the streamer
+     * @param limit the amount of followers to retrieve
+     *
+     * @return pair of the amount of followers and "limit" followers' ids
+     */
+    fun getFollowers(streamer: String, limit: Int = 1): Pair<Int, List<String>>? {
+        if (limit < 1 || limit > 100) return null
+
+        val id = getStreamerId(streamer) ?: return null
+
+        val ret = makeRequest(Request.Builder()
+                .url(baseUrl
+                        .newBuilder()
+                        .addPathSegments("users/follows")
+                        .addQueryParameter("to_id", id.toString())
+                        .addQueryParameter("first", limit.toString())
+                        .build())
+                .get()
+                .build()) ?: return null
+
+        if (ret.has("total") && ret["total"].asInt == 0) return null
+
+        val data = ret.get("data")?.asJsonArray ?: return null
+        val users = data.map { it.asJsonObject["from_id"].asString }
+        return Pair(ret["total"].asInt, users)
     }
 
     private fun makeRequest(req: Request): JsonObject? {
