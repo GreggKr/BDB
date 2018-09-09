@@ -2,7 +2,6 @@ package me.greggkr.bdb.util.twitch
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
-import me.greggkr.bdb.OK_LOG_INTERPRETER
 import me.greggkr.bdb.config
 import me.greggkr.bdb.util.Config
 import me.greggkr.bdb.util.twitch.`object`.Game
@@ -18,7 +17,6 @@ private val CLIENT = OkHttpClient.Builder()
         .authenticator { _, response ->
             response.request().newBuilder().addHeader("Client-ID", CLIENT_ID).build()
         }
-        .addInterceptor(OK_LOG_INTERPRETER)
         .build()
 
 private val baseUrl = HttpUrl.parse("https://api.twitch.tv/helix")!!
@@ -64,6 +62,21 @@ object Twitch {
                 .url(baseUrl.newBuilder()
                         .addPathSegment("users")
                         .addQueryParameter("login", user)
+                        .build()
+                )
+                .get()
+                .build()) ?: return null
+
+        val data = if (ret.has("data") && ret["data"].isJsonArray) ret["data"].asJsonArray else return null
+        if (data.size() == 0) return null
+        return gson.fromJson(data[0].asJsonObject, User::class.java)
+    }
+
+    fun getUserById(id: String): User? {
+        val ret = makeRequest(Request.Builder()
+                .url(baseUrl.newBuilder()
+                        .addPathSegment("users")
+                        .addQueryParameter("id", id)
                         .build()
                 )
                 .get()

@@ -8,7 +8,6 @@ import me.greggkr.bdb.util.twitch.Twitch
 import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.entities.Message
 import net.dv8tion.jda.core.entities.MessageChannel
-import java.time.OffsetDateTime
 
 @CommandDescription(name = "twitch", triggers = [
     "twitch"
@@ -97,6 +96,53 @@ class TwitchCommand : Command {
                         .setColor(data.getColor(guild))
                         .setThumbnail(game.getIcon())
                         .addField("Name", game.name, true)
+                        .build())
+                        .queue()
+
+                return
+            }
+
+            "top", "t" -> {
+                if (a.size < 2) { // 0 -> top, 1 -> game, 2 -> amount
+                    channel.sendMessage("${Emoji.X} Correct Usage: ${data.getPrefix(guild)}twitch top <game> <amount = 1>").queue()
+                    return
+                }
+
+                var game: String
+                var amt: Int?
+
+                val gSb = StringBuilder()
+                for (i in 1 until a.size - 1) {
+                    gSb.append(a[i]).append(" ")
+                }
+                game = gSb.toString().trim()
+                amt = a[a.size - 1].toIntOrNull()
+
+                if (amt == null) {
+                    val gSb2 = StringBuilder()
+                    for (i in 1 until a.size) {
+                        gSb2.append(a[i]).append(" ")
+                    }
+                    game = gSb2.toString().trim()
+                    amt = 1
+                }
+
+                val streamers = Twitch.getTopLiveStreamers(game, amt)
+                if (streamers == null) {
+                    channel.sendMessage("${Emoji.X} Correct Usage: ${data.getPrefix(guild)}twitch top <game> <amount = 1>").queue()
+                    return
+                }
+
+                val sb = StringBuilder()
+                for (s in streamers) {
+                    val user = Twitch.getUserById(s.userId) ?: continue
+                    sb.append("**${user.displayName}** - [${s.title}](https://twitch.tv/${user.login}) (`${s.language}`) - `${s.viewerCount} viewers`\n\n")
+                }
+
+                channel.sendMessage(EmbedBuilder()
+                        .setColor(data.getColor(guild))
+                        .setTitle("Top $amt streamer(s) for $game")
+                        .setDescription(sb.toString())
                         .build())
                         .queue()
 

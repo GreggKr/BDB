@@ -48,7 +48,6 @@ dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.4.14'
 
     compile 'com.squareup.okhttp3:okhttp:3.11.0'
-    compile 'com.github.simonpercic:oklog3-java:2.3.0'
 }
 
 jar {

@@ -11,7 +11,7 @@ data class StreamUser(
         @SerializedName("type") val type: String,
         @SerializedName("title") val title: String,
         @SerializedName("viewer_count") val viewerCount: Int,
-        @SerializedName("started_at") val startedAt: OffsetDateTime,
+        @SerializedName("started_at") val startedAt: String,
         @SerializedName("language") val language: String,
         @SerializedName("thumbnail_url") val thumbnailUrl: String
 )
