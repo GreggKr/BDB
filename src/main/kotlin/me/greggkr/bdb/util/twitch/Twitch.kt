@@ -2,24 +2,32 @@ package me.greggkr.bdb.util.twitch
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
+import me.greggkr.bdb.OK_LOG_INTERPRETER
 import me.greggkr.bdb.config
 import me.greggkr.bdb.util.Config
+import me.greggkr.bdb.util.twitch.`object`.Game
 import me.greggkr.bdb.util.twitch.`object`.User
+import me.greggkr.bdb.util.twitch.`object`.streams.StreamUser
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
 private val CLIENT_ID = config[Config.Twitch.clientId]
+
 private val CLIENT = OkHttpClient.Builder()
         .authenticator { _, response ->
             response.request().newBuilder().addHeader("Client-ID", CLIENT_ID).build()
-        }.build()
+        }
+        .addInterceptor(OK_LOG_INTERPRETER)
+        .build()
 
 private val baseUrl = HttpUrl.parse("https://api.twitch.tv/helix")!!
 private val gson = GsonBuilder()
         .setLenient()
         .setPrettyPrinting()
         .create()
+
+private val cachedGames = mutableMapOf<String, Game>()
 
 object Twitch {
     private fun getStreamerId(user: String): Int? {
@@ -110,6 +118,46 @@ object Twitch {
         val data = ret.get("data")?.asJsonArray ?: return null
         val users = data.map { it.asJsonObject["from_id"].asString }
         return Pair(ret["total"].asInt, users)
+    }
+
+    fun getGame(game: String): Game? {
+        val name = game.toLowerCase()
+
+        if (name in cachedGames) return cachedGames[name]!!
+
+        val ret = makeRequest(Request.Builder()
+                .url(baseUrl
+                        .newBuilder()
+                        .addPathSegments("games")
+                        .addQueryParameter("name", name)
+                        .build())
+                .get()
+                .build()) ?: return null
+
+        val data = ret["data"]?.asJsonArray ?: return null
+        if (data.size() == 0) return null
+        val g = gson.fromJson(data[0].asJsonObject, Game::class.java)
+
+        cachedGames[name] = g
+        return g
+    }
+
+    fun getTopLiveStreamers(game: String, amount: Int = 1): Array<StreamUser>? {
+        val g = getGame(game) ?: return null
+
+        val ret = makeRequest(Request.Builder()
+                .url(baseUrl
+                        .newBuilder()
+                        .addPathSegments("streams")
+                        .addQueryParameter("game_id", g.id)
+                        .addQueryParameter("first", amount.toString())
+                        .build())
+                .get()
+                .build()) ?: return null
+
+        val data = ret["data"]?.asJsonArray ?: return null
+        if (data.size() == 0) return null
+        return gson.fromJson(data, Array<StreamUser>::class.java)
     }
 
     private fun makeRequest(req: Request): JsonObject? {

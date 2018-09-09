@@ -1,5 +1,6 @@
 package me.greggkr.bdb
 
+import com.github.simonpercic.oklog3.OkLogInterceptor
 import com.natpryce.konfig.ConfigurationProperties
 import me.diax.comportment.jdacommand.CommandHandler
 import me.greggkr.bdb.handlers.ModLogHandler
@@ -8,16 +9,22 @@ import me.greggkr.bdb.util.Config
 import me.greggkr.bdb.util.ScheduledMessager
 import me.greggkr.bdb.util.db.Data
 import me.greggkr.bdb.util.db.Database
-import me.philippheuer.twitch4j.TwitchClientBuilder
 import net.dv8tion.jda.core.AccountType
 import net.dv8tion.jda.core.JDABuilder
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
+import org.slf4j.LoggerFactory
 import java.io.File
-import java.util.*
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
 
 typealias JDACCommandHandler = CommandHandler
+
+val OK_LOG_INTERPRETER = OkLogInterceptor.builder()
+        .withAllLogData()
+        .shortenInfoUrl(true)
+        .setLogInterceptor {
+            LoggerFactory.getLogger("OkHTTP").info(it)
+            true
+        }
+        .build()
 
 val config = ConfigurationProperties.fromFile(File("config.properties"))
 val handler = JDACCommandHandler()
@@ -37,8 +44,6 @@ val jda = JDABuilder(AccountType.BOT)
 
 fun main(args: Array<String>) {
     setIdeaIoUseFallback()
-
     handler.registerCommands(CommandRegistry.commands)
-
     ScheduledMessager.start()
 }

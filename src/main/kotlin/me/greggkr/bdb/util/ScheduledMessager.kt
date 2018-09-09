@@ -40,6 +40,6 @@ object ScheduledMessager {
 //            val msg = jda.getTextChannelById(469977153149337603).sendMessage("${jda.getGuildById(channel.guild.id).getMemberById(315563167059279882).user.asMention} welcome mate").complete()
 //            msg.delete().queue()
 //            }
-        }, 0, 24, TimeUnit.HOURS)
+        }, 24, 24, TimeUnit.HOURS)
     }
 }

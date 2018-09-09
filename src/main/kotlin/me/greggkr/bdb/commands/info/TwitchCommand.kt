@@ -8,6 +8,7 @@ import me.greggkr.bdb.util.twitch.Twitch
 import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.entities.Message
 import net.dv8tion.jda.core.entities.MessageChannel
+import java.time.OffsetDateTime
 
 @CommandDescription(name = "twitch", triggers = [
     "twitch"
@@ -76,6 +77,30 @@ class TwitchCommand : Command {
                         .addField("Followers", Twitch.getFollowers(a[1])?.first?.toString() ?: "Failed to fetch", true)
                         .build())
                         .queue()
+            }
+
+            "game", "g" -> {
+                if (a.size < 2) { // 0 -> game, 1 -> name
+                    channel.sendMessage("${Emoji.X} Correct Usage: ${data.getPrefix(guild)}twitch game <game>").queue()
+                    return
+                }
+
+                val name = a[1]
+                val game = Twitch.getGame(name)
+
+                if (game == null) {
+                    channel.sendMessage("${Emoji.X} Failed to get game `$name`.")
+                    return
+                }
+
+                channel.sendMessage(EmbedBuilder()
+                        .setColor(data.getColor(guild))
+                        .setThumbnail(game.getIcon())
+                        .addField("Name", game.name, true)
+                        .build())
+                        .queue()
+
+                return
             }
 
             else -> sendHelp(channel)

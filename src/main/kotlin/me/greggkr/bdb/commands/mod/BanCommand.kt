@@ -10,8 +10,8 @@ import me.greggkr.bdb.util.logging.Logger
 import net.dv8tion.jda.core.Permission
 import net.dv8tion.jda.core.entities.Message
 
-@CommandDescription(name = "kick", triggers = [
-    "kick"
+@CommandDescription(name = "ban", triggers = [
+    "ban"
 ], attributes = [
     CommandAttribute(key = "modOnly")
 ], description = "Allows you to ban people.")
