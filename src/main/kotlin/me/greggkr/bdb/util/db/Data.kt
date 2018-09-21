@@ -9,7 +9,7 @@ import net.dv8tion.jda.core.entities.User
 import java.awt.Color
 
 class Data(private val db: Database) {
-    private val defualtPrefix = "!"
+    private val defaultPrefix = "!"
     private val defaultColor = Color.decode("#934cff")
 
     private val prefixes = HashMap<String, String>()
@@ -25,7 +25,7 @@ class Data(private val db: Database) {
     fun getPrefix(guild: Guild): String {
         if (prefixes.contains(guild.id)) return prefixes[guild.id]!!
 
-        val prefix = db.getPrefix(guild.id) ?: defualtPrefix
+        val prefix = db.getPrefix(guild.id) ?: defaultPrefix
 
         prefixes[guild.id] = prefix
         return prefix

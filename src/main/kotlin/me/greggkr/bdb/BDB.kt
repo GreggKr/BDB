@@ -1,6 +1,7 @@
 package me.greggkr.bdb
 
 import com.natpryce.konfig.ConfigurationProperties
+import com.oopsjpeg.osu4j.backend.Osu
 import me.diax.comportment.jdacommand.CommandHandler
 import me.greggkr.bdb.handlers.ModLogHandler
 import me.greggkr.bdb.util.CommandRegistry
@@ -25,6 +26,8 @@ val data = Data(Database(
         config[Config.Mongo.host],
         config[Config.Mongo.port]
 ))
+
+val osu = Osu.getAPI(config[Config.Osu.apiKey])!!
 
 val jda = JDABuilder(AccountType.BOT)
         .setToken(config[Config.Bot.token])

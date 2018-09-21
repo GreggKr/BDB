@@ -1,9 +1,10 @@
 buildscript {
-    ext.kotlin_version = '1.2.61'
+    ext.kotlin_version = '1.2.70'
 
     repositories {
         mavenCentral()
     }
+
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -39,6 +40,7 @@ dependencies {
     compile "net.dv8tion:JDA:3.7.1_400"
     compile 'com.jagrosh:jda-utilities:2.1.4'
     compile "com.github.Comportment:JDA-Command:1.1.1"
+    compile 'com.github.JDA-Applications:Kotlin-JDA:master-SNAPSHOT'
 
     compile "ch.qos.logback:logback-classic:1.2.3"
     compile "com.natpryce:konfig:1.6.1.0"
@@ -48,6 +50,8 @@ dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.4.14'
 
     compile 'com.squareup.okhttp3:okhttp:3.11.0'
+
+    compile 'com.github.oopsjpeg:osu4j:2.0.1'
 }
 
 jar {

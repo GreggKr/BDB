@@ -14,7 +14,7 @@ class AboutCommand : Command {
         message.channel.sendMessage(EmbedBuilder()
                 .setColor(data.getColor(message.guild))
                 .setDescription("Made for the osu! team Baguetteophobia")
-                .setFooter("Created by Grzegorz#6088", null)
+                .setFooter("Created by Grzegorz", null)
                 .build())
                 .queue()
     }

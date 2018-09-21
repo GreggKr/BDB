@@ -22,4 +22,8 @@ class Config {
     object Twitch : PropertyGroup() {
         val clientId by stringType
     }
+
+    object Osu : PropertyGroup() {
+        val apiKey by stringType
+    }
 }

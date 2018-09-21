@@ -45,7 +45,6 @@ class TwitchCommand : Command {
 
                 channel.sendMessage(EmbedBuilder()
                         .setColor(data.getColor(guild))
-                        .setThumbnail(user.profileImageUrl)
                         .setDescription("${if (streaming) Emoji.WHITE_CHECK_MARK else Emoji.X} `${user.displayName}` is ${if (streaming) "" else "not "}currently streaming.")
                         .build())
                         .queue()
@@ -94,7 +93,6 @@ class TwitchCommand : Command {
 
                 channel.sendMessage(EmbedBuilder()
                         .setColor(data.getColor(guild))
-                        .setThumbnail(game.getIcon())
                         .addField("Name", game.name, true)
                         .build())
                         .queue()
