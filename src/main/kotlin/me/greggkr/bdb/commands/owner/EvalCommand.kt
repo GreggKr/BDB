@@ -7,6 +7,8 @@ import me.greggkr.bdb.data
 import me.greggkr.bdb.util.Emoji
 import me.greggkr.bdb.util.eval
 import me.greggkr.bdb.util.evalImports
+import me.greggkr.bdb.util.scriptingEngine
+import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.entities.Message
 import javax.script.ScriptException
 
@@ -28,7 +30,23 @@ class EvalCommand : Command {
     }
 
     override fun execute(message: Message, args: String) {
+        val guild = message.guild
         val channel = message.channel
+
+        if (args.isBlank()) return
+
+        if (args.split(Regex("\\s+"))[0].equals("info", true)) {
+            val factory = scriptingEngine.factory
+            channel.sendMessage(EmbedBuilder()
+                    .setColor(data.getColor(guild))
+                    .addField("Language", "${factory.languageName} v${factory.languageVersion}", true)
+                    .addField("Engine", "${factory.engineName} v${factory.engineVersion}", true)
+                    .addField("Mimetypes", factory.mimeTypes.toString(), true)
+                    .addField("Extensions", factory.extensions.toString(), true)
+                    .build())
+                    .queue()
+            return
+        }
 
         try {
             val map = mapOf(

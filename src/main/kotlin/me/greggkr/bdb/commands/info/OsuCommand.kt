@@ -1,6 +1,5 @@
 package me.greggkr.bdb.commands.info
 
-import club.minnced.kjda.builders.embed
 import com.oopsjpeg.osu4j.GameMode
 import com.oopsjpeg.osu4j.backend.EndpointUsers
 import me.diax.comportment.jdacommand.Command
@@ -8,6 +7,7 @@ import me.diax.comportment.jdacommand.CommandDescription
 import me.greggkr.bdb.data
 import me.greggkr.bdb.osu
 import me.greggkr.bdb.util.Emoji
+import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.entities.Message
 import net.dv8tion.jda.core.entities.MessageChannel
 
@@ -51,15 +51,14 @@ class OsuCommand : Command {
                     return
                 }
 
-                channel.sendMessage(embed {
-                    title { "${parsedMode.name} info for $name" }
-                    description {
-                        "Name: ${user.username}\n" +
+                channel.sendMessage(EmbedBuilder()
+                        .setTitle("${parsedMode.name} info for $name")
+                        .setDescription("Name: ${user.username}\n" +
                                 "Acc: ${user.accuracy}%\n" +
                                 "PP: ${user.ppRaw}\n" +
-                                "Rank (Global/Country): #${user.rank}/#${user.countryRank}"
-                    }
-                }).queue()
+                                "Rank (Global/Country): #${user.rank}/#${user.countryRank}")
+                        .build())
+                        .queue()
             }
         }
     }

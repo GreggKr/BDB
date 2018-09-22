@@ -2,7 +2,7 @@ package me.greggkr.bdb.util
 
 import javax.script.ScriptEngineManager
 
-val engine = ScriptEngineManager().getEngineByExtension("kts")!!
+val scriptingEngine = ScriptEngineManager().getEngineByExtension("kts")!!
 
 fun evalImports(imports: List<String>) {
     eval(imports.joinToString(";import ", "import "))
@@ -10,8 +10,8 @@ fun evalImports(imports: List<String>) {
 
 fun eval(script: String, values: Map<String, Any> = emptyMap()): Any? {
     for (e in values) {
-        engine.put(e.key, e.value)
+        scriptingEngine.put(e.key, e.value)
     }
 
-    return engine.eval(script)
+    return scriptingEngine.eval(script)
 }

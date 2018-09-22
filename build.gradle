@@ -40,7 +40,6 @@ dependencies {
     compile "net.dv8tion:JDA:3.7.1_400"
     compile 'com.jagrosh:jda-utilities:2.1.4'
     compile "com.github.Comportment:JDA-Command:1.1.1"
-    compile 'com.github.JDA-Applications:Kotlin-JDA:master-SNAPSHOT'
 
     compile "ch.qos.logback:logback-classic:1.2.3"
     compile "com.natpryce:konfig:1.6.1.0"
