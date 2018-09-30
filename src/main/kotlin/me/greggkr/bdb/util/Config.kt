@@ -27,9 +27,4 @@ class Config {
     object Osu : PropertyGroup() {
         val apiKey by stringType
     }
-
-    object Lavalink : PropertyGroup() {
-        val ws by stringType
-        val pwd by stringType
-    }
 }
