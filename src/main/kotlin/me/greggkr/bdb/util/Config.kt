@@ -8,6 +8,7 @@ import com.natpryce.konfig.stringType
 class Config {
     object Bot : PropertyGroup() {
         val token by stringType
+        val userId by stringType
     }
 
     object Mongo : PropertyGroup() {
@@ -25,5 +26,10 @@ class Config {
 
     object Osu : PropertyGroup() {
         val apiKey by stringType
+    }
+
+    object Lavalink : PropertyGroup() {
+        val ws by stringType
+        val pwd by stringType
     }
 }

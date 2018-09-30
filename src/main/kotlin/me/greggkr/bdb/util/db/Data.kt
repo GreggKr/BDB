@@ -71,4 +71,12 @@ class Data(private val db: Database) {
     fun setModRole(guild: Guild, role: Role) {
         db.setModRole(guild.id, role.id)
     }
+
+    fun getOsuUser(user: User): String? {
+        return db.getOsuUser(user.id)
+    }
+
+    fun setOsuUser(user: User, name: String) {
+        db.setOsuUser(user.id, name)
+    }
 }

@@ -66,6 +66,16 @@ class Database(user: String,
         saveField(id, "mod_roles", Document().append("role", role))
     }
 
+    fun getOsuUser(id: String): String? {
+        val doc = getDoc("global", "osu_users") ?: return null
+        return doc[id] as String?
+    }
+
+    fun setOsuUser(id: String, user: String) {
+        val doc = getDoc("global", "osu_users") ?: Document()
+        saveField("global", "osu_users", doc.append(id, user))
+    }
+
     private fun getDoc(id: String, collection: String): Document? {
         return database.getCollection(collection).find(Filters.eq("_id", id)).firstOrNull()
     }
