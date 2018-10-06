@@ -2,6 +2,9 @@ package me.greggkr.bdb
 
 import com.natpryce.konfig.ConfigurationProperties
 import com.oopsjpeg.osu4j.backend.Osu
+import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
+import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers
+import lavalink.client.io.jda.JdaLavalink
 import me.diax.comportment.jdacommand.CommandHandler
 import me.greggkr.bdb.handlers.ModLogHandler
 import me.greggkr.bdb.util.CommandRegistry
@@ -13,6 +16,7 @@ import net.dv8tion.jda.core.AccountType
 import net.dv8tion.jda.core.JDABuilder
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
 import java.io.File
+import java.net.URI
 
 typealias JDACCommandHandler = CommandHandler
 
@@ -34,8 +38,20 @@ val jda = JDABuilder(AccountType.BOT)
         .addEventListener(me.greggkr.bdb.handlers.CommandHandler(handler), ModLogHandler())
         .build()!!
 
+val playerManager = DefaultAudioPlayerManager()
+val lavaLink = JdaLavalink(config[Config.Bot.userId], 1) { _ -> jda }
+
 fun main(args: Array<String>) {
     setIdeaIoUseFallback()
+
+    if (args.isNotEmpty() && args[0].contains("audio", true)) {
+        AudioSourceManagers.registerRemoteSources(playerManager)
+        lavaLink.addNode(URI(config[Config.Lavalink.ws]), config[Config.Lavalink.pwd])
+        jda.addEventListener(lavaLink)
+
+        playerManager.createPlayer()
+    }
+
     handler.registerCommands(CommandRegistry.commands)
     ScheduledMessager.start()
 }

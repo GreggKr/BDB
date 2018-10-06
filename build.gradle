@@ -51,6 +51,8 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.11.0'
 
     compile 'com.github.oopsjpeg:osu4j:2.0.1'
+
+    compile 'com.github.FredBoat:Lavalink-Client:125b074'
 }
 
 jar {

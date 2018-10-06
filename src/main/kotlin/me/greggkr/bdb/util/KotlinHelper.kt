@@ -2,6 +2,7 @@ package me.greggkr.bdb.util
 
 import net.dv8tion.jda.core.entities.User
 import java.awt.Color
+import java.text.DecimalFormat
 
 fun Color.toHex(): String {
     return "#${Integer.toHexString(rgb).substring(2)}"
@@ -9,4 +10,8 @@ fun Color.toHex(): String {
 
 fun User.prettyString(): String {
     return "${this.name}#${this.discriminator}"
+}
+
+fun Double.toPercent(multiply: Boolean = true): String {
+    return DecimalFormat("#.##").format(this * if (multiply) 100 else 1) + "%"
 }

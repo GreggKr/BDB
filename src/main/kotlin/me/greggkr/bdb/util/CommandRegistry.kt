@@ -2,6 +2,7 @@ package me.greggkr.bdb.util
 
 import me.diax.comportment.jdacommand.Command
 import me.greggkr.bdb.commands.admin.SettingsCommand
+import me.greggkr.bdb.commands.audio.*
 import me.greggkr.bdb.commands.info.AboutCommand
 import me.greggkr.bdb.commands.info.TwitchCommand
 import me.greggkr.bdb.commands.mod.BanCommand
@@ -20,6 +21,13 @@ object CommandRegistry {
                 /* ADMIN */
                 SettingsCommand(),
 
+                /* AUDIO */
+                ConnectCommand(),
+                DisconnectCommand(),
+                PauseCommand(),
+                PlayCommand(),
+                QueueCommand(),
+
                 /* MOD */
                 BanCommand(),
                 KickCommand(),
@@ -31,12 +39,13 @@ object CommandRegistry {
                 AboutCommand(),
                 TwitchCommand(),
 
-
                 /* REDO LOL */
                 UserCommand(),
                 TopPlaysCommand(),
                 SpreadCommand(),
-                CompositionCommand()
+                CompositionCommand(),
+//                TestAudioCommand(),
+                AudioStatsCommand()
         )
     }
 
