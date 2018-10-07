@@ -7,10 +7,7 @@ import me.greggkr.bdb.commands.info.AboutCommand
 import me.greggkr.bdb.commands.info.TwitchCommand
 import me.greggkr.bdb.commands.mod.BanCommand
 import me.greggkr.bdb.commands.mod.KickCommand
-import me.greggkr.bdb.commands.osu.CompositionCommand
-import me.greggkr.bdb.commands.osu.SpreadCommand
-import me.greggkr.bdb.commands.osu.TopPlaysCommand
-import me.greggkr.bdb.commands.osu.UserCommand
+import me.greggkr.bdb.commands.osu.*
 import me.greggkr.bdb.commands.owner.EvalCommand
 
 object CommandRegistry {
@@ -24,6 +21,7 @@ object CommandRegistry {
                 /* AUDIO */
                 ConnectCommand(),
                 DisconnectCommand(),
+                NowPlayingCommand(),
                 PauseCommand(),
                 PlayCommand(),
                 QueueCommand(),
@@ -45,7 +43,8 @@ object CommandRegistry {
                 SpreadCommand(),
                 CompositionCommand(),
 //                TestAudioCommand(),
-                AudioStatsCommand()
+                AudioStatsCommand(),
+                TopAccCommand()
         )
     }
 

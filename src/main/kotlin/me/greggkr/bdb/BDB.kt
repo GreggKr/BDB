@@ -52,6 +52,8 @@ fun main(args: Array<String>) {
         playerManager.createPlayer()
     }
 
+
+
     handler.registerCommands(CommandRegistry.commands)
     ScheduledMessager.start()
 }

@@ -1,0 +1,109 @@
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ROOT_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/root.log</file>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/root.%d{yyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="SERVER_MONITOR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/mongo/server_monitor/server_monitor.log</file>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/mongo/server_monitor/server_monitor.%d{yyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="CLUSTER_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/mongo/cluster/cluster.log</file>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/mongo/cluster/cluster.%d{yyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="COMMAND_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/mongo/command/command.log</file>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/mongo/command/command.%d{yyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+    <appender name="CONNECTION_POOL_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/mongo/connection_pool/connection_pool.log</file>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/mongo/connection_pool/connection_pool.%d{yyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+    <appender name="SERVER_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/mongo/server/server.log</file>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/mongo/server/server.%d{yyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="LAVALINK_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/lavalink/lavalink.log</file>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/lavalink/lavalink.%d{yyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <logger name="org.mongodb.driver" level="OFF"/>
+
+    <logger name="me.greggkr.bdb.util.db.MongoServerMonitorListener" level="INFO">
+        <appender-ref ref="SERVER_MONITOR_FILE"/>
+    </logger>
+    <logger name="me.greggkr.bdb.util.db.MongoClusterListener" level="INFO">
+        <appender-ref ref="CLUSTER_FILE"/>
+    </logger>
+    <logger name="me.greggkr.bdb.util.db.MongoCommandListener" level="INFO">
+        <appender-ref ref="COMMAND_FILE"/>
+    </logger>
+    <logger name="me.greggkr.bdb.util.db.MongoConnectionPoolListener" level="INFO">
+        <appender-ref ref="CONNECTION_POOL_FILE"/>
+    </logger>
+    <logger name="me.greggkr.bdb.util.db.MongoServerListener" level="INFO">
+        <appender-ref ref="SERVER_FILE"/>
+    </logger>
+
+    <logger name="lavalink.client">
+        <appender-ref ref="LAVALINK_FILE"/>
+    </logger>
+
+    <root>
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="ROOT_FILE"/>
+    </root>
+</configuration>

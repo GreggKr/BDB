@@ -23,15 +23,15 @@ fun addAllToQueue(guild: Guild, tracks: List<AudioTrack>) {
 }
 
 class TrackScheduler(val guild: Guild) : AudioEventAdapterWrapped() {
-    override fun onTrackEnd(player: AudioPlayer, track: AudioTrack, endReason: AudioTrackEndReason) {
+    override fun onTrackEnd(player: AudioPlayer?, track: AudioTrack, endReason: AudioTrackEndReason) {
         playNext()
     }
 
-    override fun onTrackStuck(player: AudioPlayer, track: AudioTrack, thresholdMs: Long) {
+    override fun onTrackStuck(player: AudioPlayer?, track: AudioTrack, thresholdMs: Long) {
         playNext()
     }
 
-    override fun onTrackException(player: AudioPlayer, track: AudioTrack, exception: FriendlyException) {
+    override fun onTrackException(player: AudioPlayer?, track: AudioTrack, exception: FriendlyException) {
         playNext()
     }
 

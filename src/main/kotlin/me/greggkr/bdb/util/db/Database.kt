@@ -16,7 +16,14 @@ class Database(user: String,
                port: Int) {
 
     private val creds = MongoCredential.createCredential(user, authDBName, password.toCharArray())
-    private val client = MongoClient(ServerAddress(host, port), creds, MongoClientOptions.builder().build())
+    private val client = MongoClient(ServerAddress(host, port), creds, MongoClientOptions
+            .builder()
+            .addServerMonitorListener(MongoServerMonitorListener())
+            .addClusterListener(MongoClusterListener())
+            .addCommandListener(MongoCommandListener())
+            .addConnectionPoolListener(MongoConnectionPoolListener())
+            .addServerListener(MongoServerListener())
+            .build())
     private val database = client.getDatabase(dbName)
     private val updateOptions = UpdateOptions().upsert(true)
 

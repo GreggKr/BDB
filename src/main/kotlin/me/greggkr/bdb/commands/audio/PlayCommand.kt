@@ -42,6 +42,7 @@ class PlayCommand : Command {
                     trackLoaded(playlist.tracks[0])
                     return
                 }
+
                 if (player.playingTrack != null) {
                     addAllToQueue(guild, playlist.tracks)
                     channel.sendMessage("Added ${playlist.tracks.size} songs to queue.").queue()
