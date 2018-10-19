@@ -25,6 +25,7 @@ object CommandRegistry {
                 PauseCommand(),
                 PlayCommand(),
                 QueueCommand(),
+                SkipCommand(),
 
                 /* MOD */
                 BanCommand(),
@@ -42,7 +43,6 @@ object CommandRegistry {
                 TopPlaysCommand(),
                 SpreadCommand(),
                 CompositionCommand(),
-//                TestAudioCommand(),
                 AudioStatsCommand(),
                 TopAccCommand()
         )
