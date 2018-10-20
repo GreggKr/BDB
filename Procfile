@@ -1,1 +1,1 @@
-worker: java -jar BDB.jar
+worker: java -jar heroku/libs/BDB.jar
