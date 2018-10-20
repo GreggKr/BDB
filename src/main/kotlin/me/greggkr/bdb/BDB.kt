@@ -15,7 +15,6 @@ import me.greggkr.bdb.util.ScheduledMessager
 import me.greggkr.bdb.util.db.Data
 import me.greggkr.bdb.util.db.Database
 import net.dv8tion.jda.core.AccountType
-import net.dv8tion.jda.core.JDA
 import net.dv8tion.jda.core.JDABuilder
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
 import java.io.File
@@ -23,7 +22,7 @@ import java.net.URI
 
 typealias JDACCommandHandler = CommandHandler
 
-val config = ConfigurationProperties.fromFile(File("config.properties")) overriding EnvironmentVariables()
+val config = EnvironmentVariables()
 val handler = JDACCommandHandler()
 val data = Data(Database(
         config[Config.Mongo.user],
@@ -36,7 +35,10 @@ val data = Data(Database(
 
 val osu = Osu.getAPI(config[Config.Osu.apiKey])!!
 
-lateinit var jda: JDA
+val jda = JDABuilder(AccountType.BOT)
+        .setToken(config[Config.Bot.token])
+        .addEventListener(me.greggkr.bdb.handlers.CommandHandler(handler), ModLogHandler())
+        .build()!!
 
 val playerManager = DefaultAudioPlayerManager()
 val lavaLink = JdaLavalink(config[Config.Bot.userId], 1) { _ -> jda }
