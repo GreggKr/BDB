@@ -13,7 +13,8 @@ class AboutCommand : Command {
     override fun execute(message: Message, args: String) {
         message.channel.sendMessage(EmbedBuilder()
                 .setColor(data.getColor(message.guild))
-                .setDescription("Made for the osu! team Baguetteophobia")
+                .setDescription("Made for the osu! team Baguetteophobia\n" +
+                        "I should really update this...")
                 .setFooter("Created by Grzegorz", null)
                 .build())
                 .queue()
