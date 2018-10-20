@@ -104,4 +104,4 @@ config.properties
 logs/
 !gradle/wrapper/*.jar
 heroku/
-!heroku/**/*.jar
+#!heroku/**/*.jar
