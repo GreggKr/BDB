@@ -23,7 +23,7 @@ import java.net.URI
 
 typealias JDACCommandHandler = CommandHandler
 
-val config = EnvironmentVariables() overriding ConfigurationProperties.fromFile(File("config.properties"))
+val config = ConfigurationProperties.fromFile(File("config.properties")) overriding EnvironmentVariables()
 val handler = JDACCommandHandler()
 val data = Data(Database(
         config[Config.Mongo.user],
