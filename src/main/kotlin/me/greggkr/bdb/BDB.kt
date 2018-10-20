@@ -1,6 +1,7 @@
 package me.greggkr.bdb
 
 import com.natpryce.konfig.ConfigurationProperties
+import com.natpryce.konfig.EnvironmentVariables
 import com.natpryce.konfig.overriding
 import com.oopsjpeg.osu4j.backend.Osu
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
@@ -22,8 +23,7 @@ import java.net.URI
 
 typealias JDACCommandHandler = CommandHandler
 
-val config = ConfigurationProperties.systemProperties() overriding
-        ConfigurationProperties.fromFile(File("config.properties"))
+val config = EnvironmentVariables() overriding ConfigurationProperties.fromFile(File("config.properties"))
 val handler = JDACCommandHandler()
 val data = Data(Database(
         config[Config.Mongo.user],
