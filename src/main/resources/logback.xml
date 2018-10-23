@@ -82,19 +82,19 @@
 
     <logger name="org.mongodb.driver" level="OFF"/>
 
-    <logger name="me.greggkr.bdb.util.db.MongoServerMonitorListener" level="INFO">
+    <logger name="me.greggkr.bdb.db.MongoServerMonitorListener" level="INFO">
         <appender-ref ref="SERVER_MONITOR_FILE"/>
     </logger>
-    <logger name="me.greggkr.bdb.util.db.MongoClusterListener" level="INFO">
+    <logger name="me.greggkr.bdb.db.MongoClusterListener" level="INFO">
         <appender-ref ref="CLUSTER_FILE"/>
     </logger>
-    <logger name="me.greggkr.bdb.util.db.MongoCommandListener" level="INFO">
+    <logger name="me.greggkr.bdb.db.MongoCommandListener" level="INFO">
         <appender-ref ref="COMMAND_FILE"/>
     </logger>
-    <logger name="me.greggkr.bdb.util.db.MongoConnectionPoolListener" level="INFO">
+    <logger name="me.greggkr.bdb.db.MongoConnectionPoolListener" level="INFO">
         <appender-ref ref="CONNECTION_POOL_FILE"/>
     </logger>
-    <logger name="me.greggkr.bdb.util.db.MongoServerListener" level="INFO">
+    <logger name="me.greggkr.bdb.db.MongoServerListener" level="INFO">
         <appender-ref ref="SERVER_FILE"/>
     </logger>
 

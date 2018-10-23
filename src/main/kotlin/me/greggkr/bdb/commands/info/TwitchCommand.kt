@@ -4,7 +4,7 @@ import me.diax.comportment.jdacommand.Command
 import me.diax.comportment.jdacommand.CommandDescription
 import me.greggkr.bdb.data
 import me.greggkr.bdb.util.Emoji
-import me.greggkr.bdb.util.twitch.Twitch
+import me.greggkr.bdb.twitch.Twitch
 import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.entities.Message
 import net.dv8tion.jda.core.entities.MessageChannel

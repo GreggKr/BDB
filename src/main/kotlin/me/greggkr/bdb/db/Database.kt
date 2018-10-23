@@ -1,4 +1,4 @@
-package me.greggkr.bdb.util.db
+package me.greggkr.bdb.db
 
 import com.mongodb.MongoClient
 import com.mongodb.MongoClientOptions

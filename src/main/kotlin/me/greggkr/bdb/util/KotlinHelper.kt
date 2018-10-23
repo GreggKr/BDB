@@ -1,5 +1,6 @@
 package me.greggkr.bdb.util
 
+import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.entities.User
 import java.awt.Color
 import java.text.DecimalFormat
@@ -14,4 +15,9 @@ fun User.prettyString(): String {
 
 fun Double.toPercent(multiply: Boolean = true): String {
     return DecimalFormat("#.##").format(this * if (multiply) 100 else 1) + "%"
+}
+
+fun EmbedBuilder.addInlineField(title: String, description: String): EmbedBuilder {
+    this.addField(title, description, true)
+    return this
 }

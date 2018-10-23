@@ -1,4 +1,4 @@
-package me.greggkr.bdb.util.twitch.`object`.following
+package me.greggkr.bdb.twitch.`object`.following
 
 import com.google.gson.annotations.SerializedName
 import java.util.*

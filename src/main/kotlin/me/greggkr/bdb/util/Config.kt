@@ -32,4 +32,8 @@ class Config {
         val ws by stringType
         val pwd by stringType
     }
+
+    object Heroku : PropertyGroup() {
+        val apiToken by stringType
+    }
 }

@@ -1,12 +1,12 @@
-package me.greggkr.bdb.util.twitch
+package me.greggkr.bdb.twitch
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import me.greggkr.bdb.config
 import me.greggkr.bdb.util.Config
-import me.greggkr.bdb.util.twitch.`object`.Game
-import me.greggkr.bdb.util.twitch.`object`.User
-import me.greggkr.bdb.util.twitch.`object`.streams.StreamUser
+import me.greggkr.bdb.twitch.`object`.Game
+import me.greggkr.bdb.twitch.`object`.User
+import me.greggkr.bdb.twitch.`object`.streams.StreamUser
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request

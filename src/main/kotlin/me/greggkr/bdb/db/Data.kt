@@ -1,6 +1,6 @@
-package me.greggkr.bdb.util.db
+package me.greggkr.bdb.db
 
-import me.greggkr.bdb.util.logging.LogType
+import me.greggkr.bdb.logging.LogType
 import me.greggkr.bdb.util.toHex
 import net.dv8tion.jda.core.entities.Guild
 import net.dv8tion.jda.core.entities.Role

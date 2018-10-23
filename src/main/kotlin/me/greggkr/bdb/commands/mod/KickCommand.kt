@@ -6,7 +6,7 @@ import me.diax.comportment.jdacommand.CommandAttribute
 import me.diax.comportment.jdacommand.CommandDescription
 import me.greggkr.bdb.data
 import me.greggkr.bdb.util.Emoji
-import me.greggkr.bdb.util.logging.Logger
+import me.greggkr.bdb.logging.Logger
 import net.dv8tion.jda.core.Permission
 import net.dv8tion.jda.core.entities.Message
 

@@ -1,4 +1,4 @@
-package me.greggkr.bdb.util.logging
+package me.greggkr.bdb.logging
 
 enum class LogType {
     /* Message */

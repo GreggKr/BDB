@@ -1,7 +1,6 @@
-package me.greggkr.bdb.util.twitch.`object`.streams
+package me.greggkr.bdb.twitch.`object`.streams
 
 import com.google.gson.annotations.SerializedName
-import java.time.OffsetDateTime
 
 data class StreamUser(
         @SerializedName("id") val id: String,

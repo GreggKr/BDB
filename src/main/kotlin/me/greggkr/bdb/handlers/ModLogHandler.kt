@@ -1,8 +1,8 @@
 package me.greggkr.bdb.handlers
 
 import me.greggkr.bdb.data
-import me.greggkr.bdb.util.logging.LogType
-import me.greggkr.bdb.util.logging.Logger
+import me.greggkr.bdb.logging.LogType
+import me.greggkr.bdb.logging.Logger
 import me.greggkr.bdb.util.prettyString
 import net.dv8tion.jda.core.entities.Message
 import net.dv8tion.jda.core.events.channel.category.CategoryCreateEvent

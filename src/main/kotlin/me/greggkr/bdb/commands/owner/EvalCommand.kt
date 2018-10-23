@@ -28,8 +28,6 @@ class EvalCommand : Command {
                 "me.greggkr.bdb.*",
                 "me.greggkr.bdb.util.*"
         ))
-
-        TimeUnit.SECONDS.sleep(1)
     }
 
     override fun execute(message: Message, args: String) {

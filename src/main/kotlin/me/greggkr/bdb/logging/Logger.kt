@@ -1,4 +1,4 @@
-package me.greggkr.bdb.util.logging
+package me.greggkr.bdb.logging
 
 import me.greggkr.bdb.data
 import net.dv8tion.jda.core.EmbedBuilder

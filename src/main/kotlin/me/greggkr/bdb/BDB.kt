@@ -10,8 +10,8 @@ import me.greggkr.bdb.handlers.ModLogHandler
 import me.greggkr.bdb.util.CommandRegistry
 import me.greggkr.bdb.util.Config
 import me.greggkr.bdb.util.ScheduledMessager
-import me.greggkr.bdb.util.db.Data
-import me.greggkr.bdb.util.db.Database
+import me.greggkr.bdb.db.Data
+import me.greggkr.bdb.db.Database
 import net.dv8tion.jda.core.AccountType
 import net.dv8tion.jda.core.JDABuilder
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback

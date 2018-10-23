@@ -1,4 +1,4 @@
-package me.greggkr.bdb.util.twitch.`object`
+package me.greggkr.bdb.twitch.`object`
 
 import com.google.gson.annotations.SerializedName
 
