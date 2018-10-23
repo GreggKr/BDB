@@ -41,8 +41,6 @@ class Heroku {
                     .get()
                     .build()) ?: return null
 
-            println(ret)
-
             return gson.fromJson(ret, Array<Dyno>::class.java)
         }
 
