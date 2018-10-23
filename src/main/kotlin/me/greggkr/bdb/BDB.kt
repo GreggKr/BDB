@@ -1,8 +1,6 @@
 package me.greggkr.bdb
 
-import com.natpryce.konfig.ConfigurationProperties
 import com.natpryce.konfig.EnvironmentVariables
-import com.natpryce.konfig.overriding
 import com.oopsjpeg.osu4j.backend.Osu
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers
@@ -17,7 +15,6 @@ import me.greggkr.bdb.util.db.Database
 import net.dv8tion.jda.core.AccountType
 import net.dv8tion.jda.core.JDABuilder
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
-import java.io.File
 import java.net.URI
 
 typealias JDACCommandHandler = CommandHandler

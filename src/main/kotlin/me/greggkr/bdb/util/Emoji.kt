@@ -7,7 +7,5 @@ enum class Emoji(val unicode: String) {
     ARROW_DOUBLE_UP("\u23EB"),
     ARROW_DOUBLE_DOWN("\u23EC");
 
-    override fun toString(): String {
-        return unicode
-    }
+    override fun toString() = unicode
 }

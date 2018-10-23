@@ -10,6 +10,7 @@ import me.greggkr.bdb.util.evalImports
 import me.greggkr.bdb.util.scriptingEngine
 import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.entities.Message
+import java.util.concurrent.TimeUnit
 import javax.script.ScriptException
 
 @CommandDescription(name = "eval", triggers = [
@@ -27,6 +28,8 @@ class EvalCommand : Command {
                 "me.greggkr.bdb.*",
                 "me.greggkr.bdb.util.*"
         ))
+
+        TimeUnit.SECONDS.sleep(1)
     }
 
     override fun execute(message: Message, args: String) {
