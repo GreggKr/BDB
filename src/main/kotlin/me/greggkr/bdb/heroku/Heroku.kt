@@ -36,11 +36,7 @@ class Heroku {
 
         fun listDynos(app: String): Array<Dyno>? {
             val ret = makeRequest(Request.Builder()
-                    .url(BASE_URL.newBuilder()
-                            .addPathSegment("apps")
-                            .addPathSegment(app)
-                            .addPathSegment("dynos")
-                            .build())
+                    .url("https://api.heroku.com/apps/$app/dynos")
                     .get()
                     .build()) ?: return null
 
