@@ -22,7 +22,13 @@ import java.net.URI
 
 typealias JDACCommandHandler = CommandHandler
 
-val config = ConfigurationProperties.fromFile(File("config.properties")) overriding EnvironmentVariables()
+val configFile = File("config.properties")
+val config = if (configFile.exists()) {
+    ConfigurationProperties.fromFile(configFile)
+} else {
+    EnvironmentVariables()
+}
+
 val handler = JDACCommandHandler()
 val data = Data(Database(
         config[Config.Mongo.user],
