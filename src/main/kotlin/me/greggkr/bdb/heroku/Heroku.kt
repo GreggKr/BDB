@@ -1,6 +1,7 @@
 package me.greggkr.bdb.heroku
 
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import me.greggkr.bdb.config
 import me.greggkr.bdb.heroku.obj.Dyno
@@ -19,7 +20,7 @@ private val client = OkHttpClient.Builder()
             it.proceed(it
                     .request()
                     .newBuilder()
-                    .header("Accept", "application/vnd.heroku+json; verison=3")
+                    .header("Accept", "application/vnd.heroku+json; version=3")
                     .build())
         }
         .authenticator { _, response ->
@@ -40,14 +41,16 @@ class Heroku {
                     .get()
                     .build()) ?: return null
 
+            println(ret)
+
             return gson.fromJson(ret, Array<Dyno>::class.java)
         }
 
-        private fun makeRequest(req: Request): JsonObject? {
+        private fun makeRequest(req: Request): JsonElement? {
             val res = client.newCall(req).execute()
             val body = res.body() ?: return null
 
-            return gson.fromJson(body.string(), JsonObject::class.java)
+            return gson.fromJson(body.string(), JsonElement::class.java)
         }
     }
 }
