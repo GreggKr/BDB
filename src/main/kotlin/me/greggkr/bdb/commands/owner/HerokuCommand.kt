@@ -42,6 +42,21 @@ class HerokuCommand : Command {
                 }
 
                 channel.sendMessage(embed.build()).queue()
+                return
+            }
+
+            "restart" -> {
+                val restarted = Heroku.restartDyno(a[1], a[2])
+                if (restarted == null) {
+                    channel.sendMessage("${Emoji.X} Could not find app/dyno.").queue()
+                    return
+                }
+
+                if (!restarted) {
+                    channel.sendMessage("${Emoji.X} Failed to restart dyno.").queue()
+                    return
+                }
+                return
             }
         }
     }

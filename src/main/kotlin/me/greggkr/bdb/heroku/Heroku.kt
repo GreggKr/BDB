@@ -34,7 +34,6 @@ private val client = OkHttpClient.Builder()
 
 class Heroku {
     companion object {
-
         fun listDynos(app: String): Array<Dyno>? {
             val ret = makeRequest(Request.Builder()
                     .url("https://api.heroku.com/apps/$app/dynos")
@@ -42,6 +41,15 @@ class Heroku {
                     .build()) ?: return null
 
             return gson.fromJson(ret, Array<Dyno>::class.java)
+        }
+
+        fun restartDyno(app: String, dyno: String): Boolean? {
+            val res = client.newCall(Request.Builder()
+                    .url("https://api.heroku.com/apps/$app/dynos/$dyno")
+                    .delete()
+                    .build()).execute()
+
+            return res.isSuccessful
         }
 
         private fun makeRequest(req: Request): JsonElement? {
