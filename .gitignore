@@ -103,5 +103,3 @@ hs_err_pid*
 config.properties
 logs/
 !gradle/wrapper/*.jar
-heroku/
-#!heroku/**/*.jar
