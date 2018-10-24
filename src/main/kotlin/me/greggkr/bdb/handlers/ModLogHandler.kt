@@ -4,7 +4,11 @@ import me.greggkr.bdb.data
 import me.greggkr.bdb.logging.LogType
 import me.greggkr.bdb.logging.Logger
 import me.greggkr.bdb.util.prettyString
+import net.dv8tion.jda.core.audit.ActionType
+import net.dv8tion.jda.core.audit.AuditLogEntry
+import net.dv8tion.jda.core.audit.AuditLogOption
 import net.dv8tion.jda.core.entities.Message
+import net.dv8tion.jda.core.entities.User
 import net.dv8tion.jda.core.events.channel.category.CategoryCreateEvent
 import net.dv8tion.jda.core.events.channel.category.CategoryDeleteEvent
 import net.dv8tion.jda.core.events.channel.text.TextChannelCreateEvent
@@ -28,8 +32,24 @@ class ModLogHandler : ListenerAdapter() {
     override fun onGuildMessageDelete(e: GuildMessageDeleteEvent) {
         if (!data.getLogTypeEnabled(e.guild, LogType.GUILD_MESSAGE_DELETE)) return
         val msg = getCachedMessage(e.messageIdLong) ?: return
+//
+//        val logs = e.guild.auditLogs
+//                .type(ActionType.MESSAGE_DELETE)
+//
+//        var entry: AuditLogEntry? = null
+//        logs.queue { entries ->
+//            entries.forEach {
+//                if (it.targetId == e.messageId) {
+//                    entry = it
+//                    return@queue
+//                }
+//            }
+//        }
+
+
         Logger.logMessage(e.guild, "Message Deleted", msg.author.effectiveAvatarUrl, "Message by ${msg.author.prettyString()}", "Deleted Message:\n${msg.contentRaw
-                ?: "No text"}")
+                ?: "No text"}\n" /*+
+                "Test: ${entry?.options ?: "oofed"}"*/)
 
         cached.remove(msg)
     }
