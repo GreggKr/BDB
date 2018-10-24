@@ -8,9 +8,11 @@ import me.greggkr.bdb.commands.info.HelpCommand
 import me.greggkr.bdb.commands.info.TwitchCommand
 import me.greggkr.bdb.commands.mod.BanCommand
 import me.greggkr.bdb.commands.mod.KickCommand
+import me.greggkr.bdb.commands.nsfw.E6Command
 import me.greggkr.bdb.commands.osu.*
 import me.greggkr.bdb.commands.owner.EvalCommand
 import me.greggkr.bdb.commands.owner.HerokuCommand
+import me.greggkr.bdb.commands.weeb.E9Command
 
 object CommandRegistry {
     val commands = HashSet<Command>()
@@ -41,6 +43,12 @@ object CommandRegistry {
                 AboutCommand(),
                 HelpCommand(),
                 TwitchCommand(),
+
+                /* NSFW */
+                E6Command(),
+
+                /* WEEB */
+                E9Command(),
 
                 /* REDO LOL */
                 UserCommand(),

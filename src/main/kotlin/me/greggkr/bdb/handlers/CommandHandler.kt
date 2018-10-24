@@ -2,8 +2,11 @@ package me.greggkr.bdb.handlers
 
 import me.diax.comportment.jdacommand.CommandHandler
 import me.greggkr.bdb.data
+import me.greggkr.bdb.util.Emoji
 import net.dv8tion.jda.core.Permission
 import net.dv8tion.jda.core.entities.ChannelType
+import net.dv8tion.jda.core.entities.MessageChannel
+import net.dv8tion.jda.core.entities.TextChannel
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent
 import net.dv8tion.jda.core.hooks.ListenerAdapter
 
@@ -47,6 +50,11 @@ class CommandHandler(private val handler: CommandHandler) : ListenerAdapter() {
             } else {
                 if (!member.isOwner && !data.isOwner(user)) return
             }
+        }
+
+        if (cmd.hasAttribute("nsfw") && !(channel as TextChannel).isNSFW) {
+            channel.sendMessage("${Emoji.X} This command must be used from a NSFW channel.")
+            return
         }
 
         handler.execute(cmd, e.message, if (args.size > 1) args[1] else "")
