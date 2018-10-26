@@ -32,24 +32,9 @@ class ModLogHandler : ListenerAdapter() {
     override fun onGuildMessageDelete(e: GuildMessageDeleteEvent) {
         if (!data.getLogTypeEnabled(e.guild, LogType.GUILD_MESSAGE_DELETE)) return
         val msg = getCachedMessage(e.messageIdLong) ?: return
-//
-//        val logs = e.guild.auditLogs
-//                .type(ActionType.MESSAGE_DELETE)
-//
-//        var entry: AuditLogEntry? = null
-//        logs.queue { entries ->
-//            entries.forEach {
-//                if (it.targetId == e.messageId) {
-//                    entry = it
-//                    return@queue
-//                }
-//            }
-//        }
-
 
         Logger.logMessage(e.guild, "Message Deleted", msg.author.effectiveAvatarUrl, "Message by ${msg.author.prettyString()}", "Deleted Message:\n${msg.contentRaw
-                ?: "No text"}\n" /*+
-                "Test: ${entry?.options ?: "oofed"}"*/)
+                ?: "No text"}\n")
 
         cached.remove(msg)
     }

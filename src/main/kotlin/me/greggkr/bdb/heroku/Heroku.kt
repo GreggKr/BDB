@@ -2,15 +2,13 @@ package me.greggkr.bdb.heroku
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
-import com.google.gson.JsonObject
 import me.greggkr.bdb.config
 import me.greggkr.bdb.heroku.obj.Dyno
 import me.greggkr.bdb.util.Config
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
-
-private val BASE_URL = HttpUrl.parse("https://api.heroku.com")!!
+import okhttp3.RequestBody
 
 private val API_KEY = config[Config.Heroku.apiToken]
 
@@ -47,6 +45,15 @@ class Heroku {
             val res = client.newCall(Request.Builder()
                     .url("https://api.heroku.com/apps/$app/dynos/$dyno")
                     .delete()
+                    .build()).execute()
+
+            return res.isSuccessful
+        }
+
+        fun stopDyno(app: String, dyno: String): Boolean? {
+            val res = client.newCall(Request.Builder()
+                    .url("https://api.heroku.com/apps/$app/dynos/$dyno/actions/stop")
+                    .post(RequestBody.create(null, ""))
                     .build()).execute()
 
             return res.isSuccessful

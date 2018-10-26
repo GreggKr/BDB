@@ -58,6 +58,20 @@ class HerokuCommand : Command {
                 }
                 return
             }
+
+            "stop" -> {
+                val stopped = Heroku.stopDyno(a[1], a[2])
+                if (stopped == null) {
+                    channel.sendMessage("${Emoji.X} Could not find app/dyno.").queue()
+                    return
+                }
+
+                if (!stopped) {
+                    channel.sendMessage("${Emoji.X} Failed to stop dyno.").queue()
+                    return
+                }
+                return
+            }
         }
     }
 }

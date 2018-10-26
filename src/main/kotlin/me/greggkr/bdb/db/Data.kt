@@ -19,7 +19,8 @@ class Data(private val db: Database) {
             184733130123378688, // Landon
             216596910792769537, // Yosh
             131392299514068992, // Hand
-            199374658200403969 // Michael (Plowayy)
+            199374658200403969, // Michael (Plowayy)
+            346755297714372609 // Luminiscental
     )
 
     fun isOwner(user: User) = owners.contains(user.idLong)
