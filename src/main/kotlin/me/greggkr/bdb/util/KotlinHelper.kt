@@ -21,3 +21,13 @@ fun EmbedBuilder.addInlineField(title: String, description: String): EmbedBuilde
     this.addField(title, description, true)
     return this
 }
+
+fun EmbedBuilder.addInlineField(title: String, description: Int): EmbedBuilder {
+    this.addInlineField(title, description.toString())
+    return this
+}
+
+fun EmbedBuilder.addInlineField(title: String, description: Double): EmbedBuilder {
+    this.addInlineField(title, description.toString())
+    return this
+}

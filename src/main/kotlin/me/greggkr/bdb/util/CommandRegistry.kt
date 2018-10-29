@@ -4,6 +4,7 @@ import me.diax.comportment.jdacommand.Command
 import me.greggkr.bdb.commands.admin.SettingsCommand
 import me.greggkr.bdb.commands.audio.*
 import me.greggkr.bdb.commands.info.AboutCommand
+import me.greggkr.bdb.commands.info.DabbyCommand
 import me.greggkr.bdb.commands.info.HelpCommand
 import me.greggkr.bdb.commands.info.TwitchCommand
 import me.greggkr.bdb.commands.mod.BanCommand
@@ -41,6 +42,8 @@ object CommandRegistry {
                 AboutCommand(),
                 HelpCommand(),
                 TwitchCommand(),
+
+                DabbyCommand(),
 
                 /* REDO LOL */
                 UserCommand(),
