@@ -11,7 +11,7 @@ import net.dv8tion.jda.core.entities.Message
 class DabbyCommand : Command {
     override fun execute(message: Message, args: String) {
         message.channel.sendMessage(EmbedBuilder()
-                .setImage("https://cdn.discordapp.com/attachments/204464836283858945/506264841548201985/dabby.png")
+                .setImage("https://cdn.discordapp.com/attachments/434004583300202497/508767853416284172/dabby.png")
                 .build())
                 .queue()
     }
