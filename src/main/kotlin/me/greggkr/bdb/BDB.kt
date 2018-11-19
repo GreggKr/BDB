@@ -2,8 +2,6 @@ package me.greggkr.bdb
 
 import com.natpryce.konfig.ConfigurationProperties
 import com.natpryce.konfig.EnvironmentVariables
-import com.natpryce.konfig.overriding
-import com.oopsjpeg.osu4j.backend.Osu
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers
 import lavalink.client.io.jda.JdaLavalink
@@ -19,6 +17,7 @@ import net.dv8tion.jda.core.JDABuilder
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
 import java.io.File
 import java.net.URI
+import java.text.DecimalFormat
 
 typealias JDACCommandHandler = CommandHandler
 
@@ -39,6 +38,8 @@ val data = Data(Database(
         config[Config.Mongo.port]
 ))
 
+val test = Osu
+
 val osu = Osu.getAPI(config[Config.Osu.apiKey])!!
 
 val jda = JDABuilder(AccountType.BOT)
@@ -47,7 +48,10 @@ val jda = JDABuilder(AccountType.BOT)
         .build()!!
 
 val playerManager = DefaultAudioPlayerManager()
-val lavaLink = JdaLavalink(config[Config.Bot.userId], 1) { _ -> jda }
+val lavaLink = JdaLavalink(config[Config.Bot.userId], 1) { jda }
+
+val starFormat = DecimalFormat("##.##")
+val scoreFormat = DecimalFormat("###,###,###,###")
 
 fun main(args: Array<String>) {
     setIdeaIoUseFallback()

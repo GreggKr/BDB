@@ -4,11 +4,7 @@ import me.greggkr.bdb.data
 import me.greggkr.bdb.logging.LogType
 import me.greggkr.bdb.logging.Logger
 import me.greggkr.bdb.util.prettyString
-import net.dv8tion.jda.core.audit.ActionType
-import net.dv8tion.jda.core.audit.AuditLogEntry
-import net.dv8tion.jda.core.audit.AuditLogOption
 import net.dv8tion.jda.core.entities.Message
-import net.dv8tion.jda.core.entities.User
 import net.dv8tion.jda.core.events.channel.category.CategoryCreateEvent
 import net.dv8tion.jda.core.events.channel.category.CategoryDeleteEvent
 import net.dv8tion.jda.core.events.channel.text.TextChannelCreateEvent

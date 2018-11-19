@@ -1,5 +1,6 @@
 package me.greggkr.bdb.util
 
+import com.oopsjpeg.osu4j.GameMode
 import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.entities.User
 import java.awt.Color
@@ -30,4 +31,19 @@ fun EmbedBuilder.addInlineField(title: String, description: Int): EmbedBuilder {
 fun EmbedBuilder.addInlineField(title: String, description: Double): EmbedBuilder {
     this.addInlineField(title, description.toString())
     return this
+}
+
+fun EmbedBuilder.addInlineField(title: String, description: Float): EmbedBuilder {
+    this.addInlineField(title, description.toString())
+    return this
+}
+
+fun gameModeFromName(name: String): GameMode? {
+    return when (name.toLowerCase()) {
+        "std", "standard", "osu!standard", "0" -> GameMode.STANDARD
+        "taiko", "tai", "tak", "1" -> GameMode.TAIKO
+        "ctb", "catchthebeat", "beat", "2" -> GameMode.CATCH_THE_BEAT
+        "mania", "man", "osu!mania", "3" -> GameMode.MANIA
+        else -> null
+    }
 }

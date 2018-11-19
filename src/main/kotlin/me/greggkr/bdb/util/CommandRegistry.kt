@@ -34,6 +34,9 @@ object CommandRegistry {
                 BanCommand(),
                 KickCommand(),
 
+                /* OSU */
+                MultiCommand(),
+
                 /* OWNER */
                 EvalCommand(),
                 HerokuCommand(),
@@ -51,7 +54,8 @@ object CommandRegistry {
                 SpreadCommand(),
                 CompositionCommand(),
                 AudioStatsCommand(),
-                TopAccCommand()
+                TopAccCommand(),
+                RecentCommand()
         )
     }
 
