@@ -6,6 +6,8 @@ import me.diax.comportment.jdacommand.Command
 import me.diax.comportment.jdacommand.CommandDescription
 import me.greggkr.bdb.data
 import me.greggkr.bdb.osu
+import me.greggkr.bdb.ppFormat
+import me.greggkr.bdb.twoDecFormat
 import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.entities.Message
 import kotlin.math.sqrt
@@ -45,14 +47,17 @@ class SpreadCommand : Command {
         channel.sendMessage(EmbedBuilder()
                 .setColor(data.getColor(guild))
                 .setTitle("PP Spread for $args")
-                .setDescription("Top play: [${sorted[0].pp}](https://osu.ppy.sh/b/${sorted[0].beatmapID})\n" +
-                        "50th play: [${sorted[49]?.pp ?: "None"}](https://osu.ppy.sh/b/${sorted[49]?.beatmapID
-                                ?: 0})\n" +
-                        "Mean: $mean\n" +
-                        "Median: $median\n" +
-                        "Range: ${sorted[0].pp - sorted[49].pp}\n" +
-                        "Standard Deviation: $standardDeviation\n" +
-                        "Skew (coeff 6): $skew")
+                .setDescription("Top play: [${ppFormat.format(sorted[0].pp)}](https://osu.ppy.sh/b/${sorted[0].beatmapID})\n" +
+                        "50th play: [${ppFormat.format(sorted[49]?.pp)
+                                ?: "None"}](https://osu.ppy.sh/b/${sorted[49]?.beatmapID
+                                ?: 0})\n\n" +
+
+                        "Mean: ${ppFormat.format(mean)}\n" +
+                        "Median: ${ppFormat.format(median)}\n\n" +
+
+                        "Range: ${ppFormat.format(sorted[0].pp - sorted[49].pp)}\n" +
+                        "Standard Deviation: ${twoDecFormat.format(standardDeviation)}\n" +
+                        "Skew (coeff 6): ${twoDecFormat.format(skew)}")
                 .build())
                 .queue()
     }

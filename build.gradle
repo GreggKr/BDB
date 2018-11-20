@@ -58,8 +58,7 @@ dependencies {
 
     compile 'com.github.FredBoat:Lavalink-Client:125b074'
 
-//    compile 'com.github.GreggKr:osu4j:f7168b5'
-    compile 'com.github.oopsjpeg:osu4j:df9485b'
+    compile 'com.github.GreggKr:osu4j:f7168b5'
     compile 'com.github.francesco149:koohii:1.0.15'
     compile 'com.github.gdaniel:beatmap-analyzer:40b8a8e'
 

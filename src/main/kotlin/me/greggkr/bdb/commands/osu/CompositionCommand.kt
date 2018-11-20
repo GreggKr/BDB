@@ -6,6 +6,8 @@ import me.diax.comportment.jdacommand.Command
 import me.diax.comportment.jdacommand.CommandDescription
 import me.greggkr.bdb.data
 import me.greggkr.bdb.osu
+import me.greggkr.bdb.percentFormat
+import me.greggkr.bdb.ppFormat
 import me.greggkr.bdb.util.Emoji
 import me.greggkr.bdb.util.addInlineField
 import net.dv8tion.jda.core.EmbedBuilder
@@ -72,9 +74,9 @@ class CompositionCommand : Command {
         channel.sendMessage(EmbedBuilder()
                 .setColor(data.getColor(guild))
                 .setTitle("PP Composition for ${a[0]} ($limit plays)")
-                .addInlineField("PP", "Top $limit: $weightedPP\n" +
-                        "Total PP: $userPP")
-                .setDescription("Your top $limit plays make up ${(weightedPP / userPP) * 100}% of your total pp.")
+                .setDescription("Your top $limit plays make up ${percentFormat.format(weightedPP / userPP)} of your total pp.")
+                .addInlineField("PP", "Top $limit: ${ppFormat.format(weightedPP)}\n" +
+                        "Total PP: ${ppFormat.format(userPP)}")
                 .build())
                 .queue()
     }

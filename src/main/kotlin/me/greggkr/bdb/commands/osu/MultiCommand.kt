@@ -1,5 +1,8 @@
 package me.greggkr.bdb.commands.osu
 
+import com.oopsjpeg.osu4j.GameMod
+import com.oopsjpeg.osu4j.OsuMatch
+import com.oopsjpeg.osu4j.backend.EndpointMatches
 import me.diax.comportment.jdacommand.Command
 import me.diax.comportment.jdacommand.CommandDescription
 import me.greggkr.bdb.analysis.calculateDifficulty
@@ -10,6 +13,7 @@ import me.greggkr.bdb.util.Emoji
 import me.greggkr.bdb.util.addInlineField
 import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.entities.Message
+import org.jetbrains.kotlin.utils.addToStdlib.sumByLong
 
 @CommandDescription(name = "multi", triggers = [
     "multi"
@@ -134,11 +138,11 @@ class MultiCommand : Command {
                             }
 
                             if (redTotal > blueTotal) {
-                                "$redTotal: Red ${if (redTotal > blueTotal) "<" else ""}\n" +
-                                        "$blueTotal: Blue ${if (blueTotal > redTotal) "<" else ""}\n\n$scoreSb"
+                                "$redTotal: Red < (+${redTotal - blueTotal})\n" +
+                                        "$blueTotal: Blue\n\n$scoreSb"
                             } else {
-                                "$blueTotal: Blue ${if (blueTotal > redTotal) "<" else ""}\n" +
-                                        "$redTotal: Red ${if (redTotal > blueTotal) "<" else ""}\n\n$scoreSb"
+                                "$blueTotal: Blue ${if (blueTotal > redTotal) "< (+${blueTotal - redTotal})" else ""}\n" +
+                                        "$redTotal: Red\n\n$scoreSb"
                             }
                         } else {
                             val sb = StringBuilder("Scores:\n")

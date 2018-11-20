@@ -2,6 +2,7 @@ package me.greggkr.bdb
 
 import com.natpryce.konfig.ConfigurationProperties
 import com.natpryce.konfig.EnvironmentVariables
+import com.oopsjpeg.osu4j.backend.Osu
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers
 import lavalink.client.io.jda.JdaLavalink
@@ -38,8 +39,6 @@ val data = Data(Database(
         config[Config.Mongo.port]
 ))
 
-val test = Osu
-
 val osu = Osu.getAPI(config[Config.Osu.apiKey])!!
 
 val jda = JDABuilder(AccountType.BOT)
@@ -52,6 +51,9 @@ val lavaLink = JdaLavalink(config[Config.Bot.userId], 1) { jda }
 
 val starFormat = DecimalFormat("##.##")
 val scoreFormat = DecimalFormat("###,###,###,###")
+val ppFormat = DecimalFormat("######.##")
+val percentFormat = DecimalFormat("##.##%")
+val twoDecFormat = DecimalFormat("##.##")
 
 fun main(args: Array<String>) {
     setIdeaIoUseFallback()

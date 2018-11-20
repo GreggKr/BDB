@@ -1,14 +1,9 @@
 package me.greggkr.bdb.commands.osu
 
-import com.github.francesco149.koohii.Koohii
 import com.oopsjpeg.osu4j.GameMode
-import com.oopsjpeg.osu4j.backend.EndpointUserBests
 import com.oopsjpeg.osu4j.backend.EndpointUserRecents
-import lt.ekgame.beatmap_analyzer.utils.ScoreVersion
 import me.diax.comportment.jdacommand.Command
 import me.diax.comportment.jdacommand.CommandDescription
-import me.greggkr.bdb.analysis.Score
-import me.greggkr.bdb.analysis.analyse
 import me.greggkr.bdb.data
 import me.greggkr.bdb.osu
 import me.greggkr.bdb.util.Emoji
@@ -16,9 +11,6 @@ import me.greggkr.bdb.util.addInlineField
 import me.greggkr.bdb.util.gameModeFromName
 import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.entities.Message
-import java.io.BufferedReader
-import java.io.File
-import java.io.FileReader
 
 @CommandDescription(name = "recent", triggers = [
     "recent"
@@ -73,22 +65,22 @@ class RecentCommand : Command {
         for (mod in play.enabledMods) {
             bitwiseMods or mod.bit.toInt()
         }
-        val pp = analyse(Score(
-                map.id,
-                if (play.maxCombo == 0) 1 else play.maxCombo,
-                if (play.hit300 == 0) 1 else play.hit300,
-                play.hit100,
-                play.hit50,
-                play.misses,
-                bitwiseMods
-        ), ScoreVersion.V1)
+//        val pp = analyse(Score(
+//                map.id,
+//                play?.maxCombo ?: 0,
+//                play?.hit300 ?: 0,
+//                play.hit100,
+//                play.hit50,
+//                play.misses,
+//                bitwiseMods
+//        ))
 
         channel.sendMessage(EmbedBuilder()
                 .setColor(data.getColor(guild))
                 .setTitle("${map.title} [${map.version}] $mods [${map.difficulty}]")
                 .addInlineField("Rank", play.rank)
                 .addInlineField("max_combo/300s/100s/50s/Xs", "${map.maxCombo}/${play.hit300}/${play.hit100}/${play.hit50}/${play.misses}")
-                .addInlineField("Calculated PP", "Aim: ${pp.aimPerformance}\nSpeed: ${pp.speedPerformance}\nTotal: ${pp.performance}")
+//                .addInlineField("Calculated PP", "Aim: ${pp?.aim}\nSpeed: ${pp?.speed}\nTotal: ${pp?.total}")
                 .setTimestamp(play.date.toOffsetDateTime())
                 .build())
                 .queue()
