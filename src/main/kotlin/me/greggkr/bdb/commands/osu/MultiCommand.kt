@@ -146,12 +146,24 @@ class MultiCommand : Command {
                             }
                         } else {
                             val sb = StringBuilder("Scores:\n")
-                            scores.forEach {
+                            if (scores.size == 2) {
                                 sb
+                                    .append(scores[0].score)
+                                    .append(": ")
+                                    .append(scores[0].user.get().username)
+                                    .append(" < (+${scores[0].score - scores[1].score})\n")
+                                    .append(scores[1].score)
+                                    .append(": ")
+                                    .append(scores[1].user.get().username)
+                                    .append("\n")
+                            } else {
+                                scores.forEach {
+                                    sb
                                         .append(it.score)
                                         .append(": ")
                                         .append(it.user.get().username)
                                         .append("\n")
+                                }
                             }
                         } + "```").queue()
             }
