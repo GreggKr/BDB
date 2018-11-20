@@ -50,11 +50,11 @@ object CommandRegistry {
 
                 /* REDO LOL */
                 UserCommand(),
-                TopPlaysCommand(),
+//                TopPlaysCommand(),
                 SpreadCommand(),
                 CompositionCommand(),
                 AudioStatsCommand(),
-                TopAccCommand(),
+//                TopAccCommand(),
                 RecentCommand()
         )
     }
