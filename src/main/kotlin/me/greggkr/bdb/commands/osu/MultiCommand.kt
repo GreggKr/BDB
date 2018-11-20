@@ -74,11 +74,11 @@ class MultiCommand : Command {
 
                 val mvp = scores[0]
 
-                val modStr = if (game.mods.isNullOrEmpty()) "FM" else GameMod.toShortName(game.mods)
+                val modStr = if (game.mods.isNullOrEmpty()) "NM" else GameMod.toShortName(game.mods)
 
                 val beatmap = game.beatmap.get()
 
-                val diff = calculateDifficulty(beatmap.id, if (modStr == "FM") "" else modStr)
+                val diff = calculateDifficulty(beatmap.id, if (modStr == "NM") "" else modStr)
                 channel.sendMessage("```${beatmap.artist} - ${beatmap.title} [${beatmap.version}] - ${beatmap.creatorName} +$modStr\n" +
                         "(${starFormat.format(diff.stars)}STR, ${beatmap.hitLength}DRT, ${beatmap.bpm}BPM, CS${beatmap.size}, AR${beatmap.approach}, HP${beatmap.drain}, OD${beatmap.overall})\n\n" +
 
@@ -135,7 +135,7 @@ class MultiCommand : Command {
                                                 "$redTotal: Red\n\n$scoreSb"
                                     }
                         } else {
-                            val sb = StringBuilder("Scores:\n")
+                            val sb = StringBuilder()
                             if (scores.size == 2) {
                                 val score0 = scores[0].score
                                 val score1 = scores[1].score
