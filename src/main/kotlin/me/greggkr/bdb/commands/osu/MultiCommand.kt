@@ -70,17 +70,11 @@ class MultiCommand : Command {
                     return
                 }
 
-                val scores = game.scores
-                scores.sortBy { it.score }
+                val scores = game.scores.sortedByDescending { it.score }
 
-
-                val mvpScores = game.scores
-                mvpScores.sortBy { it.score }
-                val mvp = mvpScores[mvpScores.size - 1]
-
+                val mvp = scores[0]
 
                 val modStr = if (game.mods.isNullOrEmpty()) "FM" else GameMod.toShortName(game.mods)
-
 
                 val beatmap = game.beatmap.get()
 
@@ -95,13 +89,10 @@ class MultiCommand : Command {
                             val redTotal = red.sumByLong { it.score.toLong() }
                             val blueTotal = blue.sumByLong { it.score.toLong() }
 
-                            val blueScores = scores.filter { it.team == 1 }
-                            val redScores = scores.filter { it.team == 2 }
-
                             val scoreSb = StringBuilder()
                             if (blueTotal > redTotal) {
                                 scoreSb.append("Blue:\n")
-                                blueScores.forEach {
+                                blue.forEach {
                                     scoreSb
                                             .append(it.score)
                                             .append(": ")
@@ -110,7 +101,7 @@ class MultiCommand : Command {
                                 }
 
                                 scoreSb.append("\nRed: \n")
-                                redScores.forEach {
+                                red.forEach {
                                     scoreSb
                                             .append(it.score)
                                             .append(": ")
@@ -119,7 +110,7 @@ class MultiCommand : Command {
                                 }
                             } else {
                                 scoreSb.append("Red: \n")
-                                redScores.forEach {
+                                red.forEach {
                                     scoreSb
                                             .append(it.score)
                                             .append(": ")
@@ -128,7 +119,7 @@ class MultiCommand : Command {
                                 }
 
                                 scoreSb.append("\nBlue:\n")
-                                blueScores.forEach {
+                                blue.forEach {
                                     scoreSb
                                             .append(it.score)
                                             .append(": ")
@@ -147,22 +138,24 @@ class MultiCommand : Command {
                         } else {
                             val sb = StringBuilder("Scores:\n")
                             if (scores.size == 2) {
+                                val score0 = scores[0].score
+                                val score1 = scores[1].score
                                 sb
-                                    .append(scores[0].score)
-                                    .append(": ")
-                                    .append(scores[0].user.get().username)
-                                    .append(" < (+${scores[0].score - scores[1].score})\n")
-                                    .append(scores[1].score)
-                                    .append(": ")
-                                    .append(scores[1].user.get().username)
-                                    .append("\n")
+                                        .append(score0)
+                                        .append(": ")
+                                        .append(scores[0].user.get().username)
+                                        .append(" < (+${score0 - score1})\n")
+                                        .append(scores[1].score)
+                                        .append(": ")
+                                        .append(scores[1].user.get().username)
+                                        .append("\n")
                             } else {
                                 scores.forEach {
                                     sb
-                                        .append(it.score)
-                                        .append(": ")
-                                        .append(it.user.get().username)
-                                        .append("\n")
+                                            .append(it.score)
+                                            .append(": ")
+                                            .append(it.user.get().username)
+                                            .append("\n")
                                 }
                             }
                         } + "```").queue()
