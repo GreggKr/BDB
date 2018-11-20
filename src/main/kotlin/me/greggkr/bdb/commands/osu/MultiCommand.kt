@@ -82,7 +82,6 @@ class MultiCommand : Command {
                 channel.sendMessage("```${beatmap.artist} - ${beatmap.title} [${beatmap.version}] - ${beatmap.creatorName} +$modStr\n" +
                         "(${starFormat.format(diff.stars)}STR, ${beatmap.hitLength}DRT, ${beatmap.bpm}BPM, CS${beatmap.size}, AR${beatmap.approach}, HP${beatmap.drain}, OD${beatmap.overall})\n\n" +
 
-                        "MVP: ${mvp.user.get().username} - ${mvp.score}\n\n" +
                         if (OsuMatch.TeamType.isTeamMode(game.teamType)) {
                             val red = scores.filter { it.team == 2 }
                             val blue = scores.filter { it.team == 1 }
@@ -127,14 +126,14 @@ class MultiCommand : Command {
                                             .append("\n")
                                 }
                             }
-
-                            if (redTotal > blueTotal) {
-                                "$redTotal: Red < (+${redTotal - blueTotal})\n" +
-                                        "$blueTotal: Blue\n\n$scoreSb"
-                            } else {
-                                "$blueTotal: Blue ${if (blueTotal > redTotal) "< (+${blueTotal - redTotal})" else ""}\n" +
-                                        "$redTotal: Red\n\n$scoreSb"
-                            }
+                            "MVP: ${mvp.user.get().username} - ${mvp.score}\n\n" +
+                                    if (redTotal > blueTotal) {
+                                        "$redTotal: Red < (+${redTotal - blueTotal})\n" +
+                                                "$blueTotal: Blue\n\n$scoreSb"
+                                    } else {
+                                        "$blueTotal: Blue ${if (blueTotal > redTotal) "< (+${blueTotal - redTotal})" else ""}\n" +
+                                                "$redTotal: Red\n\n$scoreSb"
+                                    }
                         } else {
                             val sb = StringBuilder("Scores:\n")
                             if (scores.size == 2) {
