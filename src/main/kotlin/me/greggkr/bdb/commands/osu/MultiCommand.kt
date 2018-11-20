@@ -101,38 +101,38 @@ class MultiCommand : Command {
                             val scoreSb = StringBuilder()
                             if (blueTotal > redTotal) {
                                 scoreSb.append("Blue:\n")
-                                blueScores.forEachOrdered {
+                                for (blueScore in blueScores) {
                                     scoreSb
-                                            .append(it.score)
+                                            .append(blueScore.score)
                                             .append(": ")
-                                            .append(it.user.get().username)
+                                            .append(blueScore.user.get().username)
                                             .append("\n")
                                 }
 
                                 scoreSb.append("\nRed: \n")
-                                redScores.forEachOrdered {
+                                for (redScore in redScores) {
                                     scoreSb
-                                            .append(it.score)
+                                            .append(redScore.score)
                                             .append(": ")
-                                            .append(it.user.get().username)
+                                            .append(redScore.user.get().username)
                                             .append("\n")
                                 }
                             } else {
                                 scoreSb.append("Red: \n")
-                                redScores.forEachOrdered {
+                                for (redScore in redScores) {
                                     scoreSb
-                                            .append(it.score)
+                                            .append(redScore.score)
                                             .append(": ")
-                                            .append(it.user.get().username)
+                                            .append(redScore.user.get().username)
                                             .append("\n")
                                 }
 
                                 scoreSb.append("\nBlue:\n")
-                                blueScores.forEachOrdered {
+                                for (blueScore in blueScores) {
                                     scoreSb
-                                            .append(it.score)
+                                            .append(blueScore.score)
                                             .append(": ")
-                                            .append(it.user.get().username)
+                                            .append(blueScore.user.get().username)
                                             .append("\n")
                                 }
                             }
@@ -157,11 +157,11 @@ class MultiCommand : Command {
                                     .append(scores[1].user.get().username)
                                     .append("\n")
                             } else {
-                                scores.forEachOrdered {
+                                for (score in scores) {
                                     sb
-                                        .append(it.score)
+                                        .append(score.score)
                                         .append(": ")
-                                        .append(it.user.get().username)
+                                        .append(score.user.get().username)
                                         .append("\n")
                                 }
                             }
