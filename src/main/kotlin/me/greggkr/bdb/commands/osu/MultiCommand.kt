@@ -159,9 +159,9 @@ class MultiCommand : Command {
                             } else {
                                 scores.forEach {
                                     sb
-                                        .append(score.score)
+                                        .append(it.score)
                                         .append(": ")
-                                        .append(score.user.get().username)
+                                        .append(it.user.get().username)
                                         .append("\n")
                                 }
                             }
