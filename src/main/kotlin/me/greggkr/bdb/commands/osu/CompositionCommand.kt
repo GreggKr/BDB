@@ -63,12 +63,6 @@ class CompositionCommand : Command {
             weightedPP += (pps[i] * (Math.pow(.95, i.toDouble())))
         }
 
-//        val topPP = weigh.sumByDouble { it.pp.toDouble() }
-
-        // https://osu.ppy.sh/help/wiki/Performance_Points#Weightage_system
-        // PP[n] * 0.95^(n-1)
-
-
         val userPP = best[0].user.get().ppRaw
 
         channel.sendMessage(EmbedBuilder()

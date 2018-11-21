@@ -35,6 +35,8 @@ class CommandHandler(private val handler: CommandHandler) : ListenerAdapter() {
         val user = e.author
         val member = e.member
 
+        if (data.isBlacklisted(user.id)) return
+
         if (cmd.hasAttribute("botOwnerOnly")) {
             if (!data.isOwner(user)) return
         }

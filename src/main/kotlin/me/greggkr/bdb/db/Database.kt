@@ -83,6 +83,29 @@ class Database(user: String,
         saveField("global", "osu_users", doc.append(id, user))
     }
 
+    @Suppress("UNCHECKED_CAST")
+    fun addBlacklistedUser(id: String) {
+        val doc = getDoc("global", "blacklisted") ?: Document()
+        val list = doc.getOrDefault("users", emptyList<String>()) as MutableList<String>
+        list.add(id)
+        saveField("global", "blacklisted", doc.append("users", list))
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun removeBlacklistedUser(id: String) {
+        val doc = getDoc("global", "blacklisted") ?: return
+        val list = doc.getOrDefault("users", emptyList<String>()) as MutableList<String>
+        list.add(id)
+        saveField("global", "blacklisted", doc.append("users", list))
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun isBlacklisted(id: String): Boolean {
+        val doc = getDoc("global", "blacklisted") ?: return false
+        val list = doc.getOrDefault("users", emptyList<String>()) as MutableList<String>
+        return list.contains(id)
+    }
+
     private fun getDoc(id: String, collection: String): Document? {
         return database.getCollection(collection).find(Filters.eq("_id", id)).firstOrNull()
     }

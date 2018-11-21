@@ -10,6 +10,7 @@ import me.greggkr.bdb.commands.info.TwitchCommand
 import me.greggkr.bdb.commands.mod.BanCommand
 import me.greggkr.bdb.commands.mod.KickCommand
 import me.greggkr.bdb.commands.osu.*
+import me.greggkr.bdb.commands.owner.BlacklistUserCommand
 import me.greggkr.bdb.commands.owner.EvalCommand
 import me.greggkr.bdb.commands.owner.HerokuCommand
 
@@ -38,6 +39,7 @@ object CommandRegistry {
                 MultiCommand(),
 
                 /* OWNER */
+                BlacklistUserCommand(),
                 EvalCommand(),
                 HerokuCommand(),
 

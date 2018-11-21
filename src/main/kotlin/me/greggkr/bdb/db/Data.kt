@@ -82,4 +82,16 @@ class Data(private val db: Database) {
     fun setOsuUser(user: User, name: String) {
         db.setOsuUser(user.id, name)
     }
+
+    fun blacklistUser(id: String) {
+        db.addBlacklistedUser(id)
+    }
+
+    fun unBlacklistUser(id: String) {
+        db.removeBlacklistedUser(id)
+    }
+
+    fun isBlacklisted(id: String): Boolean {
+        return db.isBlacklisted(id)
+    }
 }
