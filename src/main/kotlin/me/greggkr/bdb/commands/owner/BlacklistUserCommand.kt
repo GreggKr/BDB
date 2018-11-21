@@ -19,10 +19,10 @@ class BlacklistUserCommand : Command {
         val pms = message.author.openPrivateChannel().complete()
         if (data.isBlacklisted(args)) {
             data.unBlacklistUser(args)
-            pms.sendMessage("${Emoji.WHITE_CHECK_MARK} Blacklisted $args").queue()
+            pms.sendMessage("${Emoji.WHITE_CHECK_MARK} Unblacklisted $args").queue()
         } else {
             data.blacklistUser(args)
-            pms.sendMessage("${Emoji.WHITE_CHECK_MARK} Unblacklisted $args").queue()
+            pms.sendMessage("${Emoji.WHITE_CHECK_MARK} Blacklisted $args").queue()
         }
     }
 }
