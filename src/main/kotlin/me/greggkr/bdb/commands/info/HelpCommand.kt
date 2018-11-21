@@ -14,9 +14,9 @@ import java.lang.StringBuilder
 class HelpCommand : Command {
     override fun execute(message: Message, args: String) {
         val sb = StringBuilder()
-        for (cmd in CommandRegistry.commands) {
-            sb.append(cmd.description.name).append("\n")
-        }
+        CommandRegistry.commands
+                .filter { !it.hasAttribute("botOwnerOnly") }
+                .forEach { sb.append(it.description.name).append("\n") }
 
         message.channel.sendMessage(EmbedBuilder()
                 .setColor(data.getColor(message.guild))
