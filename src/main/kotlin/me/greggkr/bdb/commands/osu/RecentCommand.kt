@@ -4,8 +4,11 @@ import com.oopsjpeg.osu4j.GameMode
 import com.oopsjpeg.osu4j.backend.EndpointUserRecents
 import me.diax.comportment.jdacommand.Command
 import me.diax.comportment.jdacommand.CommandDescription
+import me.greggkr.bdb.analysis.Score
+import me.greggkr.bdb.analysis.analyse
 import me.greggkr.bdb.data
 import me.greggkr.bdb.osu
+import me.greggkr.bdb.ppFormat
 import me.greggkr.bdb.util.Emoji
 import me.greggkr.bdb.util.addInlineField
 import me.greggkr.bdb.util.gameModeFromName
@@ -22,18 +25,18 @@ class RecentCommand : Command {
 
         val a = args.split(Regex("\\s+\\|\\s+"))
         var user = if (!message.mentionedUsers.isEmpty()) {
-            data.getOsuUser(message.mentionedUsers[0])
+            data.getOsuUser(guild, message.mentionedUsers[0])
         } else {
             if (a.isNullOrEmpty() || a[0].isEmpty()) {
                 println("empty")
-                data.getOsuUser(message.author)
+                data.getOsuUser(guild, message.author)
             } else {
                 a[0]
             }
         }
 
         if (user == null) {
-            user = data.getOsuUser(message.author)
+            user = data.getOsuUser(guild, message.author)
             if (user == null) {
                 channel.sendMessage("${Emoji.X} You must supply a valid user. Either the person you mentioned or you do not have a linked user. Use ${data.getPrefix(guild)}user <username>.").queue()
                 return
@@ -75,12 +78,17 @@ class RecentCommand : Command {
 //                bitwiseMods
 //        ))
 
+        val pp = analyse(map.id, map.maxCombo, play.hit100, play.hit50, play.misses, bitwiseMods)
+
+
         channel.sendMessage(EmbedBuilder()
                 .setColor(data.getColor(guild))
                 .setTitle("${map.title} [${map.version}] $mods [${map.difficulty}]")
                 .addInlineField("Rank", play.rank)
                 .addInlineField("max_combo/300s/100s/50s/Xs", "${map.maxCombo}/${play.hit300}/${play.hit100}/${play.hit50}/${play.misses}")
 //                .addInlineField("Calculated PP", "Aim: ${pp?.aim}\nSpeed: ${pp?.speed}\nTotal: ${pp?.total}")
+                .addInlineField("PP", ppFormat.format(pp.performance))
+                .addInlineField("Acc", pp.accuracy)
                 .setTimestamp(play.date.toOffsetDateTime())
                 .build())
                 .queue()

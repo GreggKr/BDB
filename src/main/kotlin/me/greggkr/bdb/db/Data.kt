@@ -2,10 +2,7 @@ package me.greggkr.bdb.db
 
 import me.greggkr.bdb.logging.LogType
 import me.greggkr.bdb.util.toHex
-import net.dv8tion.jda.core.entities.Guild
-import net.dv8tion.jda.core.entities.Role
-import net.dv8tion.jda.core.entities.TextChannel
-import net.dv8tion.jda.core.entities.User
+import net.dv8tion.jda.core.entities.*
 import java.awt.Color
 
 class Data(private val db: Database) {
@@ -75,12 +72,12 @@ class Data(private val db: Database) {
         db.setModRole(guild.id, role.id)
     }
 
-    fun getOsuUser(user: User): String? {
-        return db.getOsuUser(user.id)
+    fun getOsuUser(guild: Guild, user: User): String? {
+        return db.getOsuUser(guild.id, user.id)
     }
 
-    fun setOsuUser(user: User, name: String) {
-        db.setOsuUser(user.id, name)
+    fun setOsuUser(guild: Guild, user: User, name: String) {
+        db.setOsuUser(guild.id, user.id, name)
     }
 
     fun blacklistUser(id: String) {
@@ -93,5 +90,16 @@ class Data(private val db: Database) {
 
     fun isBlacklisted(id: String): Boolean {
         return db.isBlacklisted(id)
+    }
+
+    fun getAllOsuUsers(guild: Guild): Map<User, String>? {
+        val users = db.getAllOsuUsers(guild.id) ?: return null
+        val map = mutableMapOf<User, String>()
+        for (pair in users) {
+            val user = guild.jda.getUserById(pair.key) ?: continue
+            map[user] = pair.value
+        }
+
+        return map
     }
 }

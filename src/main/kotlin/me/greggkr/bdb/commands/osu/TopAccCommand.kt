@@ -7,6 +7,7 @@ import me.diax.comportment.jdacommand.Command
 import me.diax.comportment.jdacommand.CommandDescription
 import me.greggkr.bdb.data
 import me.greggkr.bdb.osu
+import me.greggkr.bdb.util.Emoji
 import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.entities.Message
 import kotlin.math.roundToInt
@@ -19,12 +20,22 @@ class TopAccCommand : Command {
         val guild = message.guild
         val channel = message.channel
 
-        val usernames = message.guild.members
-                .asSequence()
-                .map { it.user }
-                .mapNotNull { data.getOsuUser(it) }
-                .filter { userExists(it) }
-                .toList()
+//        val usernames = message.guild.members
+//                .asSequence()
+//                .map { it.user }
+//                .mapNotNull { data.getOsuUser(guild, it) }
+//                .filter { userExists(it) }
+//                .toList()
+
+        val usernames = data.getAllOsuUsers(guild)
+                ?.map { it.value }
+                ?.filter { userExists(it) }
+                ?.toList() ?: emptyList()
+
+        if (usernames.isEmpty()) {
+            channel.sendMessage("${Emoji.X} No users in this guild have osu! users attached to their account.").queue()
+            return
+        }
 
         val users = usernames
                 .asSequence()

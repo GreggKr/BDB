@@ -1,18 +1,17 @@
 package me.greggkr.bdb.analysis
 
-import com.github.francesco149.koohii.Koohii
 import lt.ekgame.beatmap_analyzer.difficulty.Difficulty
 import lt.ekgame.beatmap_analyzer.parser.BeatmapParser
+import lt.ekgame.beatmap_analyzer.performance.Performance
 import lt.ekgame.beatmap_analyzer.utils.Mods
+import lt.ekgame.beatmap_analyzer.utils.ScoreVersion
 import org.apache.commons.io.FileUtils
-import java.io.BufferedReader
 import java.io.File
-import java.io.FileReader
 import java.net.URL
 
-private const val DOWNLOAD_URL = "https://osu.ppy.sh/osu"
+typealias BAScore = lt.ekgame.beatmap_analyzer.performance.scores.Score
 
-class Analysis(val map: Koohii.Map)
+private const val DOWNLOAD_URL = "https://osu.ppy.sh/osu"
 
 data class Score(val id: Int,
                  val maxCombo: Int,
@@ -36,7 +35,7 @@ val bmCacheFolder = File("bm_cache/")
 //    ppv2.aim_stars = stars.aim
 //    ppv2.speed_stars = stars.speed
 //    ppv2.mods = score.mods
-//    ppv2.n300 = score.n300
+//    ppv2.n300 = 1
 //    ppv2.n100 = score.n100
 //    ppv2.n50 = score.n50
 //    ppv2.nmiss = score.nMiss
@@ -44,6 +43,24 @@ val bmCacheFolder = File("bm_cache/")
 //
 //    return Koohii.PPv2(ppv2)
 //}
+
+fun analyse(id: Int,
+            combo: Int,
+            n100: Int,
+            n50: Int,
+            nMiss: Int,
+            mods: Int): Performance {
+    val file = downloadMap(id)
+    val map = BeatmapParser().parse(file)
+
+    val score = BAScore.of(map)
+            .combo(combo)
+            .osuAccuracy(n100, n50, nMiss)
+            .version(ScoreVersion.V1)
+            .build()
+
+    return map.getDifficulty(Mods.parse(mods)).getPerformance(score)
+}
 
 fun calculateDifficulty(id: Int, mods: String): Difficulty {
     val map = BeatmapParser().parse(downloadMap(id))

@@ -15,14 +15,14 @@ class UserCommand : Command {
         val channel = message.channel
 
         if (args.isBlank()) {
-            val current = data.getOsuUser(user)
+            val current = data.getOsuUser(guild, user)
             if (current == null) {
                 channel.sendMessage("Use `${data.getPrefix(guild)}user <osu! username>` to set your username.").queue()
             } else {
                 channel.sendMessage("Your current osu! username is set to `$current`.").queue()
             }
         } else {
-            data.setOsuUser(user, args)
+            data.setOsuUser(guild, user, args)
             channel.sendMessage("Set your osu! username to `$args`.").queue()
         }
     }

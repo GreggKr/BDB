@@ -73,14 +73,25 @@ class Database(user: String,
         saveField(id, "mod_roles", Document().append("role", role))
     }
 
-    fun getOsuUser(id: String): String? {
-        val doc = getDoc("global", "osu_users") ?: return null
-        return doc[id] as String?
+    @Suppress("UNCHECKED_CAST")
+    fun getOsuUser(guild: String, id: String): String? {
+        val doc = getDoc(guild, "osu_users") ?: return null
+        val users = doc.getOrDefault("users", mutableMapOf<String, String>()) as MutableMap<String, String>
+        return users[id]
     }
 
-    fun setOsuUser(id: String, user: String) {
+    @Suppress("UNCHECKED_CAST")
+    fun getAllOsuUsers(id: String): Map<String, String>? {
+        val doc = getDoc(id, "osu_users") ?: return null
+        return doc.getOrDefault("users", mutableMapOf<String, String>()) as MutableMap<String, String>
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun setOsuUser(guild: String, id: String, user: String) {
         val doc = getDoc("global", "osu_users") ?: Document()
-        saveField("global", "osu_users", doc.append(id, user))
+        val users = doc.getOrDefault("users", mutableMapOf<String, String>()) as MutableMap<String, String>
+        users[id] = user
+        saveField(guild, "osu_users", doc.append("users", users))
     }
 
     @Suppress("UNCHECKED_CAST")
