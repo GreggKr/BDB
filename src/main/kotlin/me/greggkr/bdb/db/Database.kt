@@ -88,7 +88,7 @@ class Database(user: String,
 
     @Suppress("UNCHECKED_CAST")
     fun setOsuUser(guild: String, id: String, user: String) {
-        val doc = getDoc("global", "osu_users") ?: Document()
+        val doc = getDoc(guild, "osu_users") ?: Document()
         val users = doc.getOrDefault("users", mutableMapOf<String, String>()) as MutableMap<String, String>
         users[id] = user
         saveField(guild, "osu_users", doc.append("users", users))
