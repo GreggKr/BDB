@@ -1,5 +1,6 @@
 package me.greggkr.bdb.db
 
+import me.greggkr.bdb.data
 import me.greggkr.bdb.logging.LogType
 import me.greggkr.bdb.util.toHex
 import net.dv8tion.jda.core.entities.*
@@ -101,5 +102,17 @@ class Data(private val db: Database) {
         }
 
         return map
+    }
+
+   fun isNRARestricted(user: User): Boolean {
+       return user.idLong in db.getNRARestricted()
+   }
+
+    fun nraRestrictUser(user: User) {
+        db.addNRARestricted(user.idLong)
+    }
+
+    fun nraUnrestrictUser(user: User) {
+        db.removeNRARestricted(user.idLong)
     }
 }

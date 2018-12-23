@@ -117,6 +117,38 @@ class Database(user: String,
         return list.contains(id)
     }
 
+    @Suppress("UNCHECKED_CAST")
+    fun getUserXP(id: String, user: String): Long {
+        val doc = getDoc(id, "xp") ?: return 0
+        val map = doc.getOrDefault("users", mutableMapOf<String, Long>()) as MutableMap<String, Long>
+        return map[user] ?: 0
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun setUserXP(id: String, user: String, amt: Long) {
+        val doc = getDoc(id, "xp") ?: Document()
+        val map = doc.getOrDefault("users", mutableMapOf<String, Long>()) as MutableMap<String, Long>
+        map[user] = amt
+        saveField(id, "xp", doc.append("users", map))
+    }
+
+    fun getNRARestricted(): MutableList<Long> {
+        val doc = getDoc("nra", "nra_restricted") ?: return mutableListOf()
+        return doc.get("restricted", mutableListOf())
+    }
+
+    fun addNRARestricted(id: Long) {
+        val list = getNRARestricted()
+        list.add(id)
+        saveField("nra", "nra_restricted", Document().append("restricted", list))
+    }
+
+    fun removeNRARestricted(id: Long) {
+        val list = getNRARestricted()
+        list.remove(id)
+        saveField("nra", "nra_restricted", Document().append("restricted", list))
+    }
+
     private fun getDoc(id: String, collection: String): Document? {
         return database.getCollection(collection).find(Filters.eq("_id", id)).firstOrNull()
     }
