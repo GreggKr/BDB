@@ -20,13 +20,13 @@ class ProfileCommand : Command {
         val channel = message.channel
 
         if (args.isEmpty()) {
-            channel.sendMessage("${Emoji.X} Correct usage: ${data.getPrefix(guild)}composition <username> [amt]").queue()
+            channel.sendMessage("${Emoji.X} Correct usage: ${data.getPrefix(guild)}profile <username>").queue()
             return
         }
 
         val a = args.split(Regex("\\s+\\|\\s+"))
 
-        val best = osu.userBests.getAsQuery(EndpointUserBests.ArgumentsBuilder(args)
+        val best = osu.userBests.getAsQuery(EndpointUserBests.ArgumentsBuilder(a[0])
                 .setMode(GameMode.STANDARD)
                 .setLimit(10)
                 .build())
