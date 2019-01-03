@@ -5,11 +5,11 @@ import com.oopsjpeg.osu4j.backend.EndpointUserBests
 import me.diax.comportment.jdacommand.Command
 import me.diax.comportment.jdacommand.CommandDescription
 import me.greggkr.bdb.accuracyFormat
+import me.greggkr.bdb.analysis.analyse
 import me.greggkr.bdb.data
 import me.greggkr.bdb.osu
 import me.greggkr.bdb.ppFormat
 import me.greggkr.bdb.util.Emoji
-import me.greggkr.bdb.util.addInlineField
 import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.entities.Message
 
@@ -35,10 +35,14 @@ class ProfileCommand : Command {
                 .resolve()
 
         val pps = best.map { it.pp }
-        val weightedPps = mutableListOf<Double>()
+        val ranks = best.map { it.rank }
 
-        for (i in 0 until pps.size) {
-            weightedPps.add(pps[i] * Math.pow(.95, i.toDouble()))
+        val accuracies = best.map {
+            val bitwiseMods = 0
+            for (mod in it.enabledMods) {
+                bitwiseMods or mod.bit.toInt()
+            }
+            analyse(it.beatmapID, it.hit100, it.hit50, it.misses, bitwiseMods).accuracy
         }
 
         val user = best[0].user.get()
@@ -46,20 +50,16 @@ class ProfileCommand : Command {
         val userAcc = user.accuracy
 
         var content = "Username: [${user.username}](https://osu.ppy.sh/users/${user.id})\n" +
-                "Acc: $userAcc%\n" +
+                "Acc: ${accuracyFormat.format(userAcc)}%\n" +
                 "Total pp: ${ppFormat.format(userPp)}\n" +
                 "\n" +
                 "Top plays:\n"
 
         for (i in 0 until pps.size) {
-            val rawPp = pps[i]
-            val pp = weightedPps[i]
-            val percent = accuracyFormat.format(Math.pow(.95, i.toDouble()))
-
             val beatmap = best[i].beatmap.get()
             val beatmapInfo = "${beatmap.title} (${beatmap.creatorName})"
 
-            content += "${i + 1} - ${ppFormat.format(rawPp)} (${ppFormat.format(pp)} / " + percent + ") - [" + beatmapInfo + "](https://osu.ppy.sh/b/${beatmap.id})\n"
+            content += "- ${ppFormat.format(pps[i])} (${ranks[i]} | ${accuracyFormat.format(accuracies[i])}) | [" + beatmapInfo + "](https://osu.ppy.sh/b/${beatmap.id})\n"
         }
 
         channel.sendMessage(EmbedBuilder()
