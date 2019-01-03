@@ -13,6 +13,13 @@ typealias BAScore = lt.ekgame.beatmap_analyzer.performance.scores.Score
 
 private const val DOWNLOAD_URL = "https://osu.ppy.sh/osu"
 
+data class Analytics(val accuracy: Double,
+                     val performance: Double,
+                     val accuracyPerformance: Double,
+                     val speedPerformance: Double,
+                     val aimPerformance: Double
+)
+
 data class Score(val id: Int,
                  val maxCombo: Int,
                  val n300: Int,
@@ -45,18 +52,23 @@ val bmCacheFolder = File("bm_cache/")
 //}
 
 fun analyse(id: Int,
+            n300: Int,
             n100: Int,
             n50: Int,
             nMiss: Int,
-            mods: Int): Performance {
+            mods: Int): Analytics {
     val file = downloadMap(id)
     val map = BeatmapParser().parse(file)
+
+    val objectCount = n300 + n100 + n50 + nMiss
+    val fixedAcc = n300 * 300 + n100 * 100 + n50 * 50 / (objectCount * 300.0)
 
     val s = BAScore.of(map)
             .osuAccuracy(n100, n50, nMiss)
             .build()
 
-    return map.getDifficulty(Mods.parse(mods)).getPerformance(s)
+    val baResult = map.getDifficulty(Mods.parse(mods)).getPerformance(s)
+    return Analytics(/*baResult.accuracy*/fixedAcc, baResult.performance, baResult.accuracyPerformance, baResult.speedPerformance, baResult.aimPerformance)
 }
 
 fun calculateDifficulty(id: Int, mods: String): Difficulty {

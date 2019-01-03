@@ -67,7 +67,7 @@ class RecentCommand : Command {
             bitwiseMods or mod.bit.toInt()
         }
 
-        val pp = analyse(map.id, play.hit100, play.hit50, play.misses, bitwiseMods)
+        val pp = analyse(map.id, play.hit300, play.hit100, play.hit50, play.misses, bitwiseMods)
 
         channel.sendMessage(EmbedBuilder()
                 .setColor(data.getColor(guild))
