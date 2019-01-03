@@ -42,7 +42,11 @@ class ProfileCommand : Command {
             for (mod in it.enabledMods) {
                 bitwiseMods or mod.bit.toInt()
             }
+<<<<<<< HEAD
             analyse(it.beatmapID, it.hit300, it.hit100, it.hit50, it.misses, bitwiseMods).accuracy
+=======
+            analyse(it.beatmapID, it.hit100, it.hit50, it.misses, bitwiseMods).accuracy
+>>>>>>> upstream/master
         }
 
         val user = best[0].user.get()
