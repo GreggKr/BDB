@@ -4,7 +4,6 @@ import lt.ekgame.beatmap_analyzer.difficulty.Difficulty
 import lt.ekgame.beatmap_analyzer.parser.BeatmapParser
 import lt.ekgame.beatmap_analyzer.performance.Performance
 import lt.ekgame.beatmap_analyzer.utils.Mods
-import lt.ekgame.beatmap_analyzer.utils.ScoreVersion
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.net.URL
