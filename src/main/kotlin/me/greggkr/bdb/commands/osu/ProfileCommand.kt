@@ -4,8 +4,10 @@ import com.oopsjpeg.osu4j.GameMode
 import com.oopsjpeg.osu4j.backend.EndpointUserBests
 import me.diax.comportment.jdacommand.Command
 import me.diax.comportment.jdacommand.CommandDescription
+import me.greggkr.bdb.accuracyFormat
 import me.greggkr.bdb.data
 import me.greggkr.bdb.osu
+import me.greggkr.bdb.ppFormat
 import me.greggkr.bdb.util.Emoji
 import me.greggkr.bdb.util.addInlineField
 import net.dv8tion.jda.core.EmbedBuilder
@@ -36,7 +38,7 @@ class ProfileCommand : Command {
         val weightedPps = mutableListOf<Double>()
 
         for (i in 0 until pps.size) {
-            weightedPps.add(pps[i] * Math.pow(.95, i.toDouble()))    
+            weightedPps.add(pps[i] * Math.pow(.95, i.toDouble()))
         }
 
         val user = best[0].user.get()
@@ -44,20 +46,20 @@ class ProfileCommand : Command {
         val userAcc = user.accuracy
 
         var content = "Username: [${user.username}](https://osu.ppy.sh/users/${user.id})\n" +
-                      "Acc: $userAcc\n" +
-                      "Total pp: $userPp\n" +
-                      "\n" +
-                      "Top plays:\n"
+                "Acc: $userAcc%\n" +
+                "Total pp: ${ppFormat.format(userPp)}\n" +
+                "\n" +
+                "Top plays:\n"
 
         for (i in 0 until pps.size) {
             val rawPp = pps[i]
             val pp = weightedPps[i]
-            val percent = "%.2f".format(100.0 * Math.pow(.95, i.toDouble()))
+            val percent = accuracyFormat.format(Math.pow(.95, i.toDouble()))
 
             val beatmap = best[i].beatmap.get()
             val beatmapInfo = "${beatmap.title} (${beatmap.creatorName})"
 
-            content += "${ i + 1 } - $rawPp ($pp / " + percent + "%) - [" + beatmapInfo + "](https://osu.ppy.sh/b/${beatmap.id})\n"
+            content += "${i + 1} - ${ppFormat.format(rawPp)} (${ppFormat.format(pp)} / " + percent + ") - [" + beatmapInfo + "](https://osu.ppy.sh/b/${beatmap.id})\n"
         }
 
         channel.sendMessage(EmbedBuilder()
