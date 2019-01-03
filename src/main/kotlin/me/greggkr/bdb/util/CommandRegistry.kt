@@ -56,6 +56,7 @@ object CommandRegistry {
                 TopPlaysCommand(),
                 SpreadCommand(),
                 CompositionCommand(),
+                ProfileCommand(),
                 AudioStatsCommand(),
                 TopAccCommand(),
                 RecentCommand()
