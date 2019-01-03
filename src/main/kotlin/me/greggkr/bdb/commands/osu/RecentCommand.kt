@@ -4,11 +4,9 @@ import com.oopsjpeg.osu4j.GameMode
 import com.oopsjpeg.osu4j.backend.EndpointUserRecents
 import me.diax.comportment.jdacommand.Command
 import me.diax.comportment.jdacommand.CommandDescription
+import me.greggkr.bdb.*
 import me.greggkr.bdb.analysis.Score
 import me.greggkr.bdb.analysis.analyse
-import me.greggkr.bdb.data
-import me.greggkr.bdb.osu
-import me.greggkr.bdb.ppFormat
 import me.greggkr.bdb.util.Emoji
 import me.greggkr.bdb.util.addInlineField
 import me.greggkr.bdb.util.gameModeFromName
@@ -68,27 +66,20 @@ class RecentCommand : Command {
         for (mod in play.enabledMods) {
             bitwiseMods or mod.bit.toInt()
         }
-//        val pp = analyse(Score(
-//                map.id,
-//                play?.maxCombo ?: 0,
-//                play?.hit300 ?: 0,
-//                play.hit100,
-//                play.hit50,
-//                play.misses,
-//                bitwiseMods
-//        ))
 
-        val pp = analyse(map.id, map.maxCombo, play.hit100, play.hit50, play.misses, bitwiseMods)
-
+        val pp = analyse(map.id, play.hit100, play.hit50, play.misses, bitwiseMods)
 
         channel.sendMessage(EmbedBuilder()
                 .setColor(data.getColor(guild))
-                .setTitle("${map.title} [${map.version}] $mods [${map.difficulty}]")
+                .setTitle("${map.title} [${map.version}] $mods [${starFormat.format(map.difficulty)}*]")
                 .addInlineField("Rank", play.rank)
                 .addInlineField("max_combo/300s/100s/50s/Xs", "${map.maxCombo}/${play.hit300}/${play.hit100}/${play.hit50}/${play.misses}")
 //                .addInlineField("Calculated PP", "Aim: ${pp?.aim}\nSpeed: ${pp?.speed}\nTotal: ${pp?.total}")
-                .addInlineField("PP", ppFormat.format(pp.performance))
-                .addInlineField("Acc", pp.accuracy)
+                .addInlineField("PP", "Total: ${ppFormat.format(pp.performance)}\n" +
+                        "Speed: ${ppFormat.format(pp.speedPerformance)}\n" +
+                        "Aim: ${ppFormat.format(pp.aimPerformance)}\n" +
+                        "Acc: ${ppFormat.format(pp.accuracyPerformance)}")
+                .addInlineField("Acc", accuracyFormat.format(pp.accuracy))
                 .setTimestamp(play.date.toOffsetDateTime())
                 .build())
                 .queue()

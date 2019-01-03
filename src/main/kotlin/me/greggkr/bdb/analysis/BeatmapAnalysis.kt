@@ -45,7 +45,6 @@ val bmCacheFolder = File("bm_cache/")
 //}
 
 fun analyse(id: Int,
-            combo: Int,
             n100: Int,
             n50: Int,
             nMiss: Int,
@@ -53,13 +52,11 @@ fun analyse(id: Int,
     val file = downloadMap(id)
     val map = BeatmapParser().parse(file)
 
-    val score = BAScore.of(map)
-            .combo(combo)
+    val s = BAScore.of(map)
             .osuAccuracy(n100, n50, nMiss)
-            .version(ScoreVersion.V1)
             .build()
 
-    return map.getDifficulty(Mods.parse(mods)).getPerformance(score)
+    return map.getDifficulty(Mods.parse(mods)).getPerformance(s)
 }
 
 fun calculateDifficulty(id: Int, mods: String): Difficulty {

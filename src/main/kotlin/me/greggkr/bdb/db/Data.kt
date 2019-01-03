@@ -2,7 +2,10 @@ package me.greggkr.bdb.db
 
 import me.greggkr.bdb.logging.LogType
 import me.greggkr.bdb.util.toHex
-import net.dv8tion.jda.core.entities.*
+import net.dv8tion.jda.core.entities.Guild
+import net.dv8tion.jda.core.entities.Role
+import net.dv8tion.jda.core.entities.TextChannel
+import net.dv8tion.jda.core.entities.User
 import java.awt.Color
 
 class Data(private val db: Database) {
@@ -13,11 +16,7 @@ class Data(private val db: Database) {
 
     private val owners = listOf(
             184041169796333568, // Gregg
-            184733130123378688, // Landon
-            216596910792769537, // Yosh
-            131392299514068992, // Hand
-            199374658200403969, // Michael (Plowayy)
-            346755297714372609 // Luminiscental
+            184733130123378688 // Landon
     )
 
     fun isOwner(user: User) = owners.contains(user.idLong)
@@ -101,5 +100,17 @@ class Data(private val db: Database) {
         }
 
         return map
+    }
+
+   fun isNRARestricted(id: Long): Boolean {
+       return id in db.getNRARestricted()
+   }
+
+    fun nraRestrictUser(id: Long) {
+        db.addNRARestricted(id)
+    }
+
+    fun nraUnrestrictUser(id: Long) {
+        db.removeNRARestricted(id)
     }
 }

@@ -10,6 +10,7 @@ import me.diax.comportment.jdacommand.CommandHandler
 import me.greggkr.bdb.db.Data
 import me.greggkr.bdb.db.Database
 import me.greggkr.bdb.handlers.ModLogHandler
+import me.greggkr.bdb.nra.RestrictEventListener
 import me.greggkr.bdb.util.CommandRegistry
 import me.greggkr.bdb.util.Config
 import me.greggkr.bdb.util.ScheduledMessager
@@ -43,16 +44,16 @@ val osu = Osu.getAPI(config[Config.Osu.apiKey])!!
 
 val jda = JDABuilder(AccountType.BOT)
         .setToken(config[Config.Bot.token])
-        .addEventListener(me.greggkr.bdb.handlers.CommandHandler(handler), ModLogHandler())
+        .addEventListener(me.greggkr.bdb.handlers.CommandHandler(handler), ModLogHandler(), RestrictEventListener())
         .build()!!
 
 val playerManager = DefaultAudioPlayerManager()
 val lavaLink = JdaLavalink(config[Config.Bot.userId], 1) { jda }
 
 val starFormat = DecimalFormat("##.##")
-val scoreFormat = DecimalFormat("###,###,###,###")
 val ppFormat = DecimalFormat("######.##pp")
 val percentFormat = DecimalFormat("##.##%")
+val accuracyFormat = DecimalFormat("###.###%")
 val twoDecFormat = DecimalFormat("##.##")
 
 fun main(args: Array<String>) {

@@ -1,7 +1,6 @@
 package me.greggkr.bdb.commands.osu
 
 import com.oopsjpeg.osu4j.GameMode
-import com.oopsjpeg.osu4j.backend.EndpointUserBests
 import com.oopsjpeg.osu4j.backend.EndpointUsers
 import me.diax.comportment.jdacommand.Command
 import me.diax.comportment.jdacommand.CommandDescription
@@ -10,7 +9,6 @@ import me.greggkr.bdb.osu
 import me.greggkr.bdb.util.Emoji
 import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.entities.Message
-import kotlin.math.roundToInt
 
 @CommandDescription(name = "topacc", triggers = [
     "topacc"
@@ -29,7 +27,6 @@ class TopAccCommand : Command {
 
         val usernames = data.getAllOsuUsers(guild)
                 ?.map { it.value }
-                ?.filter { userExists(it) }
                 ?.toList() ?: emptyList()
 
         if (usernames.isEmpty()) {
@@ -58,15 +55,5 @@ class TopAccCommand : Command {
                     .appendDescription("${user.accuracy}%\n")
         }
         channel.sendMessage(embed.build()).queue()
-    }
-
-    private fun userExists(username: String): Boolean {
-        return try {
-            osu.users.getAsQuery(EndpointUsers.ArgumentsBuilder(username)
-                    .build())
-                    .resolve() != null
-        } catch (e: Exception) {
-            false
-        }
     }
 }
