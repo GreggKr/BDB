@@ -61,7 +61,7 @@ fun analyse(id: Int,
     val map = BeatmapParser().parse(file)
 
     val objectCount = n300 + n100 + n50 + nMiss
-    val fixedAcc = n300 * 300 + n100 * 100 + n50 * 50 / (objectCount * 300.0)
+    val fixedAcc = (n300 * 300 + n100 * 100 + n50 * 50) / (objectCount * 300.0)
 
     val s = BAScore.of(map)
             .osuAccuracy(n100, n50, nMiss)
