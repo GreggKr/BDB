@@ -92,3 +92,4 @@ config.properties
 logs/
 !gradle/wrapper/*.jar
 bm_cache/
+heroku/

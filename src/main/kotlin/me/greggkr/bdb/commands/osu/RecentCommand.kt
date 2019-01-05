@@ -5,10 +5,9 @@ import com.oopsjpeg.osu4j.backend.EndpointUserRecents
 import me.diax.comportment.jdacommand.Command
 import me.diax.comportment.jdacommand.CommandDescription
 import me.greggkr.bdb.*
-import me.greggkr.bdb.analysis.Score
 import me.greggkr.bdb.analysis.analyse
+import me.greggkr.bdb.osu.Osu
 import me.greggkr.bdb.util.Emoji
-import me.greggkr.bdb.util.addInlineField
 import me.greggkr.bdb.util.gameModeFromName
 import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.entities.Message
@@ -22,25 +21,7 @@ class RecentCommand : Command {
         val channel = message.channel
 
         val a = args.split(Regex("\\s+\\|\\s+"))
-        var user = if (!message.mentionedUsers.isEmpty()) {
-            data.getOsuUser(guild, message.mentionedUsers[0])
-        } else {
-            if (a.isNullOrEmpty() || a[0].isEmpty()) {
-                println("empty")
-                data.getOsuUser(guild, message.author)
-            } else {
-                a[0]
-            }
-        }
-
-        if (user == null) {
-            user = data.getOsuUser(guild, message.author)
-            if (user == null) {
-                channel.sendMessage("${Emoji.X} You must supply a valid user. Either the person you mentioned or you do not have a linked user. Use ${data.getPrefix(guild)}user <username>.").queue()
-                return
-            }
-        }
-        println(user)
+        val user = Osu.getOsuUser(message, a) ?: return
 
         val recent = osu.userRecents.getAsQuery(EndpointUserRecents.ArgumentsBuilder(user)
                 .setLimit(1)
@@ -56,30 +37,21 @@ class RecentCommand : Command {
         val play = recent[0]
         val map = play.beatmap.get()
 
-        val mods = if (play.enabledMods.isEmpty()) {
-            "No Mod"
-        } else {
-            "+" + play.enabledMods.joinToString(separator = "") { it.name }
-        }
+        val rank = Osu.prettyRank(play.rank)
+        val comboInfo = "${play.maxCombo}x/${map.maxCombo}x"
+        val mods = Osu.prettyMods(play.enabledMods)
 
-        val bitwiseMods = 0
-        for (mod in play.enabledMods) {
-            bitwiseMods or mod.bit.toInt()
-        }
-
-        val pp = analyse(map.id, play.hit300, play.hit100, play.hit50, play.misses, bitwiseMods)
+        val pp = analyse(map.id, play.maxCombo, play.hit300, play.hit100, play.hit50, play.misses, play.enabledMods)
 
         channel.sendMessage(EmbedBuilder()
                 .setColor(data.getColor(guild))
                 .setTitle("${map.title} [${map.version}] $mods [${starFormat.format(map.difficulty)}*]")
-                .addInlineField("Rank", play.rank)
-                .addInlineField("max_combo/300s/100s/50s/Xs", "${map.maxCombo}/${play.hit300}/${play.hit100}/${play.hit50}/${play.misses}")
-//                .addInlineField("Calculated PP", "Aim: ${pp?.aim}\nSpeed: ${pp?.speed}\nTotal: ${pp?.total}")
-                .addInlineField("PP", "Total: ${ppFormat.format(pp.performance)}\n" +
+                .addField("Rank, Combo, Acc", rank + ", ${comboInfo}, ${accuracyFormat.format(pp.accuracy)}", false)
+                .addField("PP", ppFormat.format(pp.performance), false)
+                .addField("PP Breakdown", "Aim: ${ppFormat.format(pp.aimPerformance)}\n" +
                         "Speed: ${ppFormat.format(pp.speedPerformance)}\n" +
-                        "Aim: ${ppFormat.format(pp.aimPerformance)}\n" +
-                        "Acc: ${ppFormat.format(pp.accuracyPerformance)}")
-                .addInlineField("Acc", accuracyFormat.format(pp.accuracy))
+                        "Acc: ${ppFormat.format(pp.accuracyPerformance)}", false)
+                .addField("300/100/50/miss", "${play.hit300}/${play.hit100}/${play.hit50}/${play.misses}", false)
                 .setTimestamp(play.date.toOffsetDateTime())
                 .build())
                 .queue()

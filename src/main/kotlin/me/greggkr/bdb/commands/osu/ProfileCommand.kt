@@ -1,15 +1,18 @@
 package me.greggkr.bdb.commands.osu
 
 import com.oopsjpeg.osu4j.GameMode
+import com.oopsjpeg.osu4j.abstractbackend.Endpoint
 import com.oopsjpeg.osu4j.backend.EndpointUserBests
 import me.diax.comportment.jdacommand.Command
 import me.diax.comportment.jdacommand.CommandDescription
 import me.greggkr.bdb.accuracyFormat
-import me.greggkr.bdb.analysis.analyse
+import me.greggkr.bdb.analysis.getAcc
 import me.greggkr.bdb.data
 import me.greggkr.bdb.osu
+import me.greggkr.bdb.osu.Osu
 import me.greggkr.bdb.ppFormat
 import me.greggkr.bdb.util.Emoji
+import me.greggkr.bdb.util.addInlineField
 import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.entities.Message
 
@@ -21,51 +24,39 @@ class ProfileCommand : Command {
         val guild = message.guild
         val channel = message.channel
 
-        if (args.isEmpty()) {
-            channel.sendMessage("${Emoji.X} Correct usage: ${data.getPrefix(guild)}profile <username>").queue()
-            return
-        }
-
         val a = args.split(Regex("\\s+\\|\\s+"))
+        val inputUser = Osu.getOsuUser(message, a) ?: return
 
-        val best = osu.userBests.getAsQuery(EndpointUserBests.ArgumentsBuilder(a[0])
+        val best = osu.userBests.getAsQuery(EndpointUserBests.ArgumentsBuilder(inputUser)
                 .setMode(GameMode.STANDARD)
                 .setLimit(10)
                 .build())
                 .resolve()
 
         val pps = best.map { it.pp }
-        val ranks = best.map { it.rank }
+        val ranks = best.map { Osu.prettyRank(it.rank) }
+        val mods = best.map { Osu.prettyMods(it.enabledMods)}
 
         val accuracies = best.map {
-            val bitwiseMods = 0
-            for (mod in it.enabledMods) {
-                bitwiseMods or mod.bit.toInt()
-            }
-            analyse(it.beatmapID, it.hit300, it.hit100, it.hit50, it.misses, bitwiseMods).accuracy
+            getAcc(it.hit300, it.hit100, it.hit50, it.misses)
         }
 
         val user = best[0].user.get()
         val userPp = user.ppRaw
-        val userAcc = user.accuracy
+        val userAcc = user.accuracy / 100.0
 
-        var content = "Username: [${user.username}](https://osu.ppy.sh/users/${user.id})\n" +
-                "Acc: ${accuracyFormat.format(userAcc)}%\n" +
-                "Total pp: ${ppFormat.format(userPp)}\n" +
-                "\n" +
-                "Top plays:\n"
+        var playList = ""
 
         for (i in 0 until pps.size) {
             val beatmap = best[i].beatmap.get()
-            val beatmapInfo = "${beatmap.title} (${beatmap.creatorName})"
-
-            content += "- ${ppFormat.format(pps[i])} (${ranks[i]} | ${accuracyFormat.format(accuracies[i])}) | [" + beatmapInfo + "](https://osu.ppy.sh/b/${beatmap.id})\n"
+            playList += "- ${ppFormat.format(pps[i])} | ${ranks[i]}, ${accuracyFormat.format(accuracies[i])}, [${beatmap.title}](https://osu.ppy.sh/b/${beatmap.id})${mods[i]}\n"
         }
 
         channel.sendMessage(EmbedBuilder()
                 .setColor(data.getColor(guild))
-                .setTitle("Profile for ${a[0]}")
-                .setDescription(content)
+                .addField("User", "[${user.username}](https://osu.ppy.sh/users/${user.id}) | ${accuracyFormat.format(userAcc)}, ${ppFormat.format(userPp)}", false)
+                .addField("Score", "Ranked: ${user.rankedScore}, Total: ${user.totalScore}", false)
+                .addField("Top Plays", playList, false)
                 .build())
                 .queue()
     }
