@@ -50,7 +50,7 @@ class SpreadCommand : Command {
 
         channel.sendMessage(EmbedBuilder()
                 .setColor(data.getColor(guild))
-                .setTitle("PP Spread for $args")
+                .setTitle("PP Spread for $user")
                 .setDescription("Top play: [${ppFormat.format(sorted[0].pp)}](https://osu.ppy.sh/b/${sorted[0].beatmapID})\n" +
                         "50th play: [${ppFormat.format(sorted[49]?.pp)
                                 ?: "None"}](https://osu.ppy.sh/b/${sorted[49]?.beatmapID
