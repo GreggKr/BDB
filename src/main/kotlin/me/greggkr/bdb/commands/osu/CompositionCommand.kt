@@ -6,6 +6,7 @@ import me.diax.comportment.jdacommand.Command
 import me.diax.comportment.jdacommand.CommandDescription
 import me.greggkr.bdb.data
 import me.greggkr.bdb.osu
+import me.greggkr.bdb.osu.Osu
 import me.greggkr.bdb.percentFormat
 import me.greggkr.bdb.ppFormat
 import me.greggkr.bdb.util.Emoji
@@ -23,18 +24,8 @@ class CompositionCommand : Command {
         val guild = message.guild
         val channel = message.channel
 
-        if (args.isEmpty()) {
-            channel.sendMessage("${Emoji.X} Correct usage: ${data.getPrefix(guild)}composition <username> [amt]").queue()
-            return
-        }
-
-        channel.history.retrievePast(100).queue { it ->
-            it.forEach {
-                ((it.delete()))
-            }
-        }
-
         val a = args.split(Regex("\\s+\\|\\s+"))
+        val user = Osu.getOsuUser(message, a) ?: return
 
         val limit = if (a.size < 2) 10 else {
             var tmp = a[1].toIntOrNull() ?: 10
@@ -49,7 +40,7 @@ class CompositionCommand : Command {
             tmp
         }
 
-        val best = osu.userBests.getAsQuery(EndpointUserBests.ArgumentsBuilder(a[0])
+        val best = osu.userBests.getAsQuery(EndpointUserBests.ArgumentsBuilder(user)
                 .setMode(GameMode.STANDARD)
                 .setLimit(limit)
                 .build())
@@ -67,8 +58,8 @@ class CompositionCommand : Command {
 
         channel.sendMessage(EmbedBuilder()
                 .setColor(data.getColor(guild))
-                .setTitle("PP Composition for ${a[0]} ($limit plays)")
-                .setDescription("Your top $limit plays make up ${percentFormat.format(weightedPP / userPP)} of your total pp.")
+                .setTitle("PP Composition for $user ($limit plays)")
+                .setDescription("That user's top $limit plays make up ${percentFormat.format(weightedPP / userPP)} of their total pp.")
                 .addInlineField("PP", "Top $limit: ${ppFormat.format(weightedPP)}\n" +
                         "Total PP: ${ppFormat.format(userPP)}")
                 .build())
