@@ -17,6 +17,7 @@ data class MapData(val od: Double,
                    val ar: Double,
                    val circleCount: Int,
                    val maxCombo: Int,
+                   val maxHits: Int,
                    val aimDifficulty: Double,
                    val speedDifficulty: Double
 )
@@ -25,7 +26,8 @@ data class Analytics(val accuracy: Double,
                      val performance: Double,
                      val accuracyPerformance: Double,
                      val speedPerformance: Double,
-                     val aimPerformance: Double
+                     val aimPerformance: Double,
+                     val mapCompletion: Double
 )
 
 data class Score(val id: Int,
@@ -99,18 +101,21 @@ fun parseMap(file: File, mods: Array<GameMod>): MapData {
 
     var reading = false
     var circleCount = 0
+    var maxHits = 0
 
     file.readLines().forEach{
         if (it.startsWith("[HitObjects]")) {
             reading = true
         } else if (reading) {
-            val type = it.split(",")[3].toInt()
-            if (type and 1 == 1) {
+            val tokens = it.split(",");
+            val type = tokens[3].toInt()
+            if (type and 1 == 1) { // circle
                 circleCount++
             }
+            maxHits++;
         }
     }
-    return MapData(od, ar, circleCount, baMap.maxCombo, aimDifficulty, speedDifficulty)
+    return MapData(od, ar, circleCount, baMap.maxCombo, maxHits, aimDifficulty, speedDifficulty)
 }
 
 fun getPP(score: Score, map: MapData): Analytics {
@@ -228,7 +233,9 @@ fun getPP(score: Score, map: MapData): Analytics {
 
     val totalPP = Math.pow(Math.pow(aimValue, 1.1) + Math.pow(speedValue, 1.1) + Math.pow(accValue, 1.1), 1.0 / 1.1) * finalMultiplier
 
-    return Analytics(acc, totalPP, aimPP, speedPP, accPP)
+    val mapCompletion = totalHits.toDouble() / map.maxHits.toDouble();
+
+    return Analytics(acc, totalPP, aimPP, speedPP, accPP, mapCompletion)
 }
 
 fun analyse(id: Int,
