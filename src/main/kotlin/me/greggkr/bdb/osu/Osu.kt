@@ -31,37 +31,6 @@ private val client = OkHttpClient.Builder()
         }
         .build()
 
-data class RecentScore(
-        @SerializedName("beatmap_id")
-        val beatmapId: String,
-        @SerializedName("count100")
-        val count100: String,
-        @SerializedName("count300")
-        val count300: String,
-        @SerializedName("count50")
-        val count50: String,
-        @SerializedName("countgeki")
-        val countgeki: String,
-        @SerializedName("countkatu")
-        val countkatu: String,
-        @SerializedName("countmiss")
-        val countmiss: String,
-        @SerializedName("date")
-        val date: String,
-        @SerializedName("enabled_mods")
-        val enabledMods: String,
-        @SerializedName("maxcombo")
-        val maxcombo: String,
-        @SerializedName("perfect")
-        val perfect: String,
-        @SerializedName("rank")
-        val rank: String,
-        @SerializedName("score")
-        val score: String,
-        @SerializedName("user_id")
-        val userId: String
-)
-
 enum class UserType(val apiName: String) {
     ID("id"), USERNAME("string")
 }
