@@ -6,6 +6,7 @@ import me.diax.comportment.jdacommand.Command
 import me.diax.comportment.jdacommand.CommandDescription
 import me.greggkr.bdb.data
 import me.greggkr.bdb.osu
+import me.greggkr.bdb.osu.Osu
 import me.greggkr.bdb.ppFormat
 import me.greggkr.bdb.twoDecFormat
 import net.dv8tion.jda.core.EmbedBuilder
@@ -20,7 +21,10 @@ class SpreadCommand : Command {
         val guild = message.guild
         val channel = message.channel
 
-        val best = osu.userBests.getAsQuery(EndpointUserBests.ArgumentsBuilder(args)
+        val a = args.split(Regex("\\s+\\|\\s+"))
+        val user = Osu.getOsuUser(message, a) ?: return
+
+        val best = osu.userBests.getAsQuery(EndpointUserBests.ArgumentsBuilder(user)
                 .setMode(GameMode.STANDARD)
                 .setLimit(50)
                 .build())
