@@ -42,6 +42,12 @@ class RecentCommand : Command {
         val mods = Osu.prettyMods(play.enabledMods)
 
         val pp = analyse(map.id, play.maxCombo, play.hit300, play.hit100, play.hit50, play.misses, play.enabledMods)
+        var description = ""
+
+        if (rank.contains("F")) {
+            val mapCompletion = play.maxCombo.toDouble() / map.maxCombo.toDouble() // Lazy value
+            description = "Map completion: ${percentFormat.format(mapCompletion)}"
+        }
 
         channel.sendMessage(EmbedBuilder()
                 .setColor(data.getColor(guild))
@@ -52,6 +58,7 @@ class RecentCommand : Command {
                         "Speed: ${ppFormat.format(pp.speedPerformance)}\n" +
                         "Acc: ${ppFormat.format(pp.accuracyPerformance)}", false)
                 .addField("300/100/50/miss", "${play.hit300}/${play.hit100}/${play.hit50}/${play.misses}", false)
+                .setDescription(description)
                 .setTimestamp(play.date.toOffsetDateTime())
                 .build())
                 .queue()

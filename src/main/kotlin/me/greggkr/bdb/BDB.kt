@@ -52,7 +52,7 @@ val lavaLink = JdaLavalink(config[Config.Bot.userId], 1) { jda }
 
 val starFormat = DecimalFormat("##.##")
 val ppFormat = DecimalFormat("######.##pp")
-val percentFormat = DecimalFormat("##.##%")
+val percentFormat = DecimalFormat("##.#%")
 val accuracyFormat = DecimalFormat("###.##%")
 val twoDecFormat = DecimalFormat("##.##")
 
