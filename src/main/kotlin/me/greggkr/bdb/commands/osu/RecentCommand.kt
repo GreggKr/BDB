@@ -45,7 +45,7 @@ class RecentCommand : Command {
         var description = ""
 
         if (rank.contains("F")) {
-            val mapCompletion = play.maxCombo.toDouble() / map.maxCombo.toDouble() // Lazy value
+            val mapCompletion = (play.hit300 + play.hit100 + play.hit50 + play.misses) / map.maxCombo.toDouble() // Lazy value
             description = "Map completion: ${percentFormat.format(mapCompletion)}"
         }
 
