@@ -68,25 +68,12 @@ enum class UserType(val apiName: String) {
 
 class Osu {
     companion object {
-        fun getUserRecent(user: String, mode: String = "0", amount: Int = 1, userType: UserType = UserType.USERNAME): Array<RecentScore>? {
-            val ret = makeRequest(Request.Builder()
-                    .url(HttpUrl.parse("https://osu.ppy.sh/api/get_user_recent")!!
-                            .newBuilder()
-                            .addQueryParameter("u", user)
-                            .addQueryParameter("m", mode)
-                            .addQueryParameter("type", userType.apiName)
-                            .addQueryParameter("limit", amount.toString())
-                            .build())
-                    .build())
-
-            return gson.fromJson(ret, Array<RecentScore>::class.java)
-        }
 
         fun prettyMods(mods: Array<GameMod>): String {
             return if (mods.isEmpty()) {
                 ""
             } else {
-                "+" + mods.joinToString(separator="") { it.shortName }
+                "+" + mods.joinToString(separator = "") { it.shortName }
             }
         }
 
@@ -102,7 +89,6 @@ class Osu {
                 data.getOsuUser(guild, message.mentionedUsers[0])
             } else {
                 if (a.isNullOrEmpty() || a[0].isEmpty()) {
-                    println("empty")
                     data.getOsuUser(guild, message.author)
                 } else {
                     a[0]
@@ -115,7 +101,6 @@ class Osu {
                     channel.sendMessage("${Emoji.X} You must supply a valid user. Either the person you mentioned or you do not have a linked user. Use ${data.getPrefix(guild)}user <username>.").queue()
                 }
             }
-            println(inputUser)
 
             return inputUser
         }
