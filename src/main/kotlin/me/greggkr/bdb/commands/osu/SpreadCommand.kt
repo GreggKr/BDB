@@ -20,9 +20,9 @@ class SpreadCommand : Command {
     override fun execute(message: Message, args: String) {
         val guild = message.guild
         val channel = message.channel
+        val p = Osu.getOsuParams(message, args)
 
-        val a = args.split(Regex("\\s+\\|\\s+"))
-        val user = Osu.getOsuUser(message, a) ?: return
+        val user = p.user ?: return
 
         val best = osu.userBests.getAsQuery(EndpointUserBests.ArgumentsBuilder(user)
                 .setMode(GameMode.STANDARD)

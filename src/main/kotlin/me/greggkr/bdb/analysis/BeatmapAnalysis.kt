@@ -233,7 +233,7 @@ fun getPP(score: Score, map: MapData): Analytics {
 
     val totalPP = Math.pow(Math.pow(aimValue, 1.1) + Math.pow(speedValue, 1.1) + Math.pow(accValue, 1.1), 1.0 / 1.1) * finalMultiplier
 
-    val mapCompletion = totalHits.toDouble() / map.maxHits.toDouble();
+    val mapCompletion = totalHits.toDouble() / map.maxHits.toDouble()
 
     return Analytics(acc, totalPP, aimPP, speedPP, accPP, mapCompletion)
 }
