@@ -25,10 +25,10 @@ class RecentBestCommand : Command {
     override fun execute(message: Message, args: String) {
         val guild = message.guild
         val channel = message.channel
-        val p = Osu.getOsuParams(message, args)
+        val p = Osu.getUserArguments(message, args)
 
         val user = p.user ?: return
-        val amount = Osu.getNumberArgument(p, 1, 1, 10)
+        val amount = Osu.getNumberArgument(p.params, 1, 1, 10)
 
         val best = osu.userBests.getAsQuery(EndpointUserBests.ArgumentsBuilder(user)
                 .setMode(GameMode.STANDARD)

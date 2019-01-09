@@ -37,8 +37,8 @@ enum class UserType(val apiName: String) {
     ID("id"), USERNAME("string")
 }
 
-data class OsuParameters(val user: String?,
-                         val params: List<String>
+data class OsuUserArguments(val user: String?,
+                            val params: List<String>
 )
 
 class Osu {
@@ -93,7 +93,7 @@ class Osu {
             return "${map.title} [${map.version}] $mods - ${starFormat.format(map.difficulty)}* ($timeInfo)"
         }
 
-        fun getOsuParams(message: Message, args: String): OsuParameters {
+        fun getUserArguments(message: Message, args: String): OsuUserArguments {
             val a = args.split(Regex("\\s+\\|\\s+"))
             val guild = message.guild
             val channel = message.channel
@@ -102,10 +102,10 @@ class Osu {
             var user = ""
 
             if (!a.isNullOrEmpty()) {
-                if (!a[0].isBlank()) {
+                if (!a[0].isEmpty()) {
                     if (a[0].contains("@") && !message.mentionedUsers.isEmpty()) {
                         val mentionedUser = data.getOsuUser(guild, message.mentionedUsers[0])
-                        if (!mentionedUser.isNullOrBlank()) {
+                        if (!mentionedUser.isNullOrEmpty()) {
                             user = mentionedUser
                             specifiedUser = true
                         }
@@ -117,15 +117,15 @@ class Osu {
                     }
                 }
 
-                if (user.isBlank()) {
+                if (user.isEmpty()) {
                     val authorUser = data.getOsuUser(guild, message.author)
-                    if (!authorUser.isNullOrBlank()) {
+                    if (!authorUser.isNullOrEmpty()) {
                         user = authorUser
                     }
                 }
             }
 
-            if (user.isBlank()) {
+            if (user.isEmpty()) {
                 channel.sendMessage("${Emoji.X} You must supply a valid user. Either the person you mentioned or you do not have a linked user. Use ${data.getPrefix(guild)}user <username>.").queue()
             }
 
@@ -136,12 +136,12 @@ class Osu {
                 a
             }
 
-            return OsuParameters(user, p)
+            return OsuUserArguments(user, p)
         }
 
-        fun getNumberArgument(p: OsuParameters, default: Int, min: Int, max: Int, index: Int = 0): Int {
-            if (p.params.size <= index) return default
-            var tmp = p.params[index].toIntOrNull() ?: default
+        fun getNumberArgument(params: List<String>, default: Int, min: Int, max: Int, index: Int = 0): Int {
+            if (params.size <= index) return default
+            var tmp = params[index].toIntOrNull() ?: default
 
             if (tmp < min) {
                 tmp = min

@@ -23,10 +23,10 @@ class CompositionCommand : Command {
     override fun execute(message: Message, args: String) {
         val guild = message.guild
         val channel = message.channel
-        val p = Osu.getOsuParams(message, args)
+        val p = Osu.getUserArguments(message, args)
 
         val user = p.user ?: return
-        val limit = Osu.getNumberArgument(p, 10, 1, 100, 0)
+        val limit = Osu.getNumberArgument(p.params, 10, 1, 100, 0)
 
         val best = osu.userBests.getAsQuery(EndpointUserBests.ArgumentsBuilder(user)
                 .setMode(GameMode.STANDARD)

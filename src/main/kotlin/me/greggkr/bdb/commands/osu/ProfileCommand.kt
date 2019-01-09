@@ -20,7 +20,7 @@ class ProfileCommand : Command {
     override fun execute(message: Message, args: String) {
         val guild = message.guild
         val channel = message.channel
-        val p = Osu.getOsuParams(message, args)
+        val p = Osu.getUserArguments(message, args)
 
         val inputUser = p.user ?: return
 
