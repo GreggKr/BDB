@@ -1,7 +1,6 @@
 package me.greggkr.bdb.commands.osu
 
 import com.oopsjpeg.osu4j.GameMode
-import com.oopsjpeg.osu4j.abstractbackend.Endpoint
 import com.oopsjpeg.osu4j.backend.EndpointUserBests
 import me.diax.comportment.jdacommand.Command
 import me.diax.comportment.jdacommand.CommandDescription
@@ -11,8 +10,6 @@ import me.greggkr.bdb.data
 import me.greggkr.bdb.osu
 import me.greggkr.bdb.osu.Osu
 import me.greggkr.bdb.ppFormat
-import me.greggkr.bdb.util.Emoji
-import me.greggkr.bdb.util.addInlineField
 import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.entities.Message
 
@@ -23,9 +20,9 @@ class ProfileCommand : Command {
     override fun execute(message: Message, args: String) {
         val guild = message.guild
         val channel = message.channel
+        val p = Osu.getUserArguments(message, args)
 
-        val a = args.split(Regex("\\s+\\|\\s+"))
-        val inputUser = Osu.getOsuUser(message, a) ?: return
+        val inputUser = p.user ?: return
 
         val best = osu.userBests.getAsQuery(EndpointUserBests.ArgumentsBuilder(inputUser)
                 .setMode(GameMode.STANDARD)
@@ -49,7 +46,7 @@ class ProfileCommand : Command {
 
         for (i in 0 until pps.size) {
             val beatmap = best[i].beatmap.get()
-            playList += "- ${ppFormat.format(pps[i])} | ${ranks[i]}, ${accuracyFormat.format(accuracies[i])}, [${beatmap.title}](https://osu.ppy.sh/b/${beatmap.id})${mods[i]}\n"
+            playList += "- ${ppFormat.format(pps[i])} | ${ranks[i]}, ${accuracyFormat.format(accuracies[i])}, [${beatmap.title} [${beatmap.version}]](https://osu.ppy.sh/b/${beatmap.id})${mods[i]}\n"
         }
 
         channel.sendMessage(EmbedBuilder()

@@ -20,13 +20,14 @@ class SpreadCommand : Command {
     override fun execute(message: Message, args: String) {
         val guild = message.guild
         val channel = message.channel
+        val p = Osu.getUserArguments(message, args)
 
-        val a = args.split(Regex("\\s+\\|\\s+"))
-        val user = Osu.getOsuUser(message, a) ?: return
+        val user = p.user ?: return
+        val limit = Osu.getNumberArgument(p.params, 50, 10, 100)
 
         val best = osu.userBests.getAsQuery(EndpointUserBests.ArgumentsBuilder(user)
                 .setMode(GameMode.STANDARD)
-                .setLimit(50)
+                .setLimit(limit)
                 .build())
                 .resolve()
 
@@ -52,14 +53,14 @@ class SpreadCommand : Command {
                 .setColor(data.getColor(guild))
                 .setTitle("PP Spread for $user")
                 .setDescription("Top play: [${ppFormat.format(sorted[0].pp)}](https://osu.ppy.sh/b/${sorted[0].beatmapID})\n" +
-                        "50th play: [${ppFormat.format(sorted[49]?.pp)
-                                ?: "None"}](https://osu.ppy.sh/b/${sorted[49]?.beatmapID
+                        "${limit}th play: [${ppFormat.format(sorted[limit - 1]?.pp)
+                                ?: "None"}](https://osu.ppy.sh/b/${sorted[limit - 1]?.beatmapID
                                 ?: 0})\n\n" +
 
                         "Mean: ${ppFormat.format(mean)}\n" +
                         "Median: ${ppFormat.format(median)}\n\n" +
 
-                        "Range: ${ppFormat.format(sorted[0].pp - sorted[49].pp)}\n" +
+                        "Range: ${ppFormat.format(sorted[0].pp - sorted[limit - 1].pp)}\n" +
                         "Standard Deviation: ${twoDecFormat.format(standardDeviation)}\n" +
                         "Skew (coeff 6): ${twoDecFormat.format(skew)}")
                 .build())

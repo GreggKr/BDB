@@ -2,16 +2,18 @@ package me.greggkr.bdb.osu
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
-import com.google.gson.annotations.SerializedName
 import com.oopsjpeg.osu4j.GameMod
+import com.oopsjpeg.osu4j.OsuScore
 import me.greggkr.bdb.config
 import me.greggkr.bdb.data
+import me.greggkr.bdb.starFormat
 import me.greggkr.bdb.util.Config
 import me.greggkr.bdb.util.Emoji
 import net.dv8tion.jda.core.entities.Message
-import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import java.time.Duration
+import java.time.LocalDateTime
 
 private val API_KEY = config[Config.Osu.apiKey]
 
@@ -35,6 +37,10 @@ enum class UserType(val apiName: String) {
     ID("id"), USERNAME("string")
 }
 
+data class OsuUserArguments(val user: String?,
+                            val params: List<String>
+)
+
 class Osu {
     companion object {
 
@@ -50,28 +56,102 @@ class Osu {
             return rank.replace("X", "SS")
         }
 
-        fun getOsuUser(message: Message, a: List<String>): String? {
+        fun prettyTime(score: OsuScore): String {
+            val duration = Duration.between(score.date.toOffsetDateTime().toLocalDateTime(), LocalDateTime.now())
+
+            val days = duration.toDays()
+            val hours = duration.minusDays(days).toHours()
+            val minutes = duration.minusHours(hours).toMinutes()
+            val seconds = duration.minusMinutes(minutes).toSeconds()
+
+            var timeInfo = ""
+
+            if (days > 0) {
+                timeInfo += if (days > 1) "$days days "
+                else "one day "
+            }
+
+            timeInfo += if (hours > 0) {
+                if (hours > 1) "$hours hours "
+                else "one hour "
+            } else if (minutes > 0 ) {
+                if (minutes > 1) "$minutes minutes "
+                else "one minute "
+            } else {
+                if (seconds > 1) "$seconds seconds "
+                else "one second "
+            }
+
+            return timeInfo + "ago"
+        }
+
+        fun playTitle(score: OsuScore): String {
+            val map = score.beatmap.get()
+            val mods = Osu.prettyMods(score.enabledMods)
+            val timeInfo = Osu.prettyTime(score)
+
+            return "${map.title} [${map.version}] $mods - ${starFormat.format(map.difficulty)}* ($timeInfo)"
+        }
+
+        fun getUserArguments(message: Message, args: String): OsuUserArguments {
+            val a = args.split(Regex("\\s+\\|\\s+"))
             val guild = message.guild
             val channel = message.channel
 
-            var inputUser = if (!message.mentionedUsers.isEmpty()) {
-                data.getOsuUser(guild, message.mentionedUsers[0])
+            var specifiedUser = false
+            var user = ""
+
+            if (!a.isNullOrEmpty()) {
+                if (!a[0].isEmpty()) {
+                    if (a[0].contains("@") && !message.mentionedUsers.isEmpty()) {
+                        val mentionedUser = data.getOsuUser(guild, message.mentionedUsers[0])
+                        if (!mentionedUser.isNullOrEmpty()) {
+                            user = mentionedUser
+                            specifiedUser = true
+                        }
+                    }
+                    // If it's a number assume it's a parameter not a username
+                    if (!specifiedUser && !a[0].matches(Regex("\\d+"))) {
+                        user = a[0]
+                        specifiedUser = true
+                    }
+                }
+
+                if (user.isEmpty()) {
+                    val authorUser = data.getOsuUser(guild, message.author)
+                    if (!authorUser.isNullOrEmpty()) {
+                        user = authorUser
+                    }
+                }
+            }
+
+            if (user.isEmpty()) {
+                channel.sendMessage("${Emoji.X} You must supply a valid user. Either the person you mentioned or you do not have a linked user. Use ${data.getPrefix(guild)}user <username>.").queue()
+            }
+
+            val p = if (specifiedUser) {
+                if (a.size < 2) listOf()
+                else a.subList(1, a.size)
             } else {
-                if (a.isNullOrEmpty() || a[0].isEmpty()) {
-                    data.getOsuUser(guild, message.author)
-                } else {
-                    a[0]
-                }
+                a
             }
 
-            if (inputUser == null) {
-                inputUser = data.getOsuUser(guild, message.author)
-                if (inputUser == null) {
-                    channel.sendMessage("${Emoji.X} You must supply a valid user. Either the person you mentioned or you do not have a linked user. Use ${data.getPrefix(guild)}user <username>.").queue()
-                }
+            return OsuUserArguments(user, p)
+        }
+
+        fun getNumberArgument(params: List<String>, default: Int, min: Int, max: Int, index: Int = 0): Int {
+            if (params.size <= index) return default
+            var tmp = params[index].toIntOrNull() ?: default
+
+            if (tmp < min) {
+                tmp = min
             }
 
-            return inputUser
+            if (tmp > max) {
+                tmp = max
+            }
+
+            return tmp
         }
 
         private fun makeRequest(req: Request): JsonElement? {

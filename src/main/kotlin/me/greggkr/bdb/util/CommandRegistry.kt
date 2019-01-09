@@ -59,7 +59,8 @@ object CommandRegistry {
                 ProfileCommand(),
                 AudioStatsCommand(),
                 TopAccCommand(),
-                RecentCommand()
+                RecentCommand(),
+                RecentBestCommand()
         )
     }
 
