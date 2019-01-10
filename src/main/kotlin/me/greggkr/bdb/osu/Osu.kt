@@ -41,6 +41,20 @@ data class OsuUserArguments(val user: String?,
                             val params: List<String>
 )
 
+enum class OsuMod(val mod: String) {
+    SO("SO"),
+    EZ("EZ"),
+    HT("HT"),
+    HD("HD"),
+    NC("NC"),
+    DT("DT"),
+    HR("HR"),
+    NF("NF"),
+    SD("SD"),
+    PF("PF"),
+    FL("FL")
+}
+
 class Osu {
     companion object {
 
@@ -48,7 +62,8 @@ class Osu {
             return if (mods.isEmpty()) {
                 ""
             } else {
-                "+" + mods.joinToString(separator = "") { it.shortName }
+                val ordered = mods.map { OsuMod.valueOf(it.shortName) }.sorted()
+                "+" + ordered.joinToString(separator = "") { it.mod }
             }
         }
 
@@ -62,7 +77,7 @@ class Osu {
             val days = duration.toDays()
             val hours = duration.minusDays(days).toHours()
             val minutes = duration.minusHours(hours).toMinutes()
-            val seconds = duration.minusMinutes(minutes).toMillis() * 1000 // very annoying
+            val seconds = duration.minusMinutes(minutes).seconds
 
             var timeInfo = ""
 
