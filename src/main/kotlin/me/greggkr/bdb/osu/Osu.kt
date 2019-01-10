@@ -62,7 +62,7 @@ class Osu {
             val days = duration.toDays()
             val hours = duration.minusDays(days).toHours()
             val minutes = duration.minusHours(hours).toMinutes()
-            val seconds = duration.minusMinutes(minutes).toSeconds()
+            val seconds = duration.minusMinutes(minutes).toMillis() * 1000 // very annoying
 
             var timeInfo = ""
 
