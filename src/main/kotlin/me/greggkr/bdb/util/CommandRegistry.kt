@@ -52,7 +52,7 @@ object CommandRegistry {
                 DabbyCommand(),
 
                 /* REDO LOL */
-                UserCommand(),
+                UsernameCommand(),
                 TopPlaysCommand(),
                 SpreadCommand(),
                 CompositionCommand(),
@@ -60,7 +60,8 @@ object CommandRegistry {
                 AudioStatsCommand(),
                 TopAccCommand(),
                 RecentCommand(),
-                RecentBestCommand()
+                RecentBestCommand(),
+                UserCommand()
         )
     }
 
