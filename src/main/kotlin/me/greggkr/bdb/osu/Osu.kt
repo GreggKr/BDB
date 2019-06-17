@@ -126,7 +126,7 @@ class Osu {
             }
 
             if (user.isEmpty()) {
-                channel.sendMessage("${Emoji.X} You must supply a valid user. Either the person you mentioned or you do not have a linked user. Use ${data.getPrefix(guild)}username <username>.").queue()
+                channel.sendMessage("${Emoji.X} You must designate a valid user. Either your Discord account or the Discord account of the user you mentioned does not have a linked account. To link an account to your Discord, use `${data.getPrefix(guild)}username <osu!username>`.").queue()
             }
 
             val p = if (specifiedUser) {
