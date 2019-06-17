@@ -56,6 +56,7 @@ class TopAccCommand : Command {
                     .appendDescription("(#${user.rank}): ")
                     .appendDescription("${user.accuracy}%\n")
         }
-        accMessage.editMessage("").complete().editMessage(embed.build()).queue()
+        accMessage.delete().queue()
+        channel.sendMessage(embed.build()).queue()
     }
 }
