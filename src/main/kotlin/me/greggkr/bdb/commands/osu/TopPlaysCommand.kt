@@ -60,7 +60,7 @@ class TopPlaysCommand : Command {
                     .appendDescription("(#${user.rank}): ")
                     .appendDescription("[${play.pp}pp](https://osu.ppy.sh/b/${play.beatmap.get().id})\n")
         }
-        playsMessage.editMessage(embed.build()).queue()
+        playsMessage.editMessage("").complete().editMessage(embed.build()).queue()
     }
 
     private fun userExists(username: String): Boolean {
