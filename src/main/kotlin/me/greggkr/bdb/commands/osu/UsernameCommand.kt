@@ -17,7 +17,7 @@ class UsernameCommand : Command {
         if (args.isBlank()) {
             val current = data.getOsuUser(guild, user)
             if (current == null) {
-                channel.sendMessage("Use `${data.getPrefix(guild)}user <osu! username>` to set your username.").queue()
+                channel.sendMessage("Use `${data.getPrefix(guild)}username <osu! username>` to set your username.").queue()
             } else {
                 channel.sendMessage("Your current osu! username is set to `$current`.").queue()
             }

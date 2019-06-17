@@ -126,7 +126,7 @@ class Osu {
             }
 
             if (user.isEmpty()) {
-                channel.sendMessage("${Emoji.X} You must supply a valid user. Either the person you mentioned or you do not have a linked user. Use ${data.getPrefix(guild)}user <username>.").queue()
+                channel.sendMessage("${Emoji.X} You must supply a valid user. Either the person you mentioned or you do not have a linked user. Use ${data.getPrefix(guild)}username <username>.").queue()
             }
 
             val p = if (specifiedUser) {
