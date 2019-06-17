@@ -34,6 +34,8 @@ class TopAccCommand : Command {
             return
         }
 
+        val accMessage = channel.sendMessage("Calculating top accuracies...").complete()
+
         val users = usernames
                 .asSequence()
                 .map {
@@ -54,6 +56,6 @@ class TopAccCommand : Command {
                     .appendDescription("(#${user.rank}): ")
                     .appendDescription("${user.accuracy}%\n")
         }
-        channel.sendMessage(embed.build()).queue()
+        accMessage.editMessage(embed.build()).queue()
     }
 }

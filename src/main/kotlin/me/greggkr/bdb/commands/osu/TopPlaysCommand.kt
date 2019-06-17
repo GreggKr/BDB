@@ -36,6 +36,8 @@ class TopPlaysCommand : Command {
             return
         }
 
+        val playsMessage = channel.sendMessage("Calculating top plays...").complete()
+
         val topPlays = usernames
                 .asSequence()
                 .map {
@@ -58,7 +60,7 @@ class TopPlaysCommand : Command {
                     .appendDescription("(#${user.rank}): ")
                     .appendDescription("[${play.pp}pp](https://osu.ppy.sh/b/${play.beatmap.get().id})\n")
         }
-        channel.sendMessage(embed.build()).queue()
+        playsMessage.editMessage(embed.build()).queue()
     }
 
     private fun userExists(username: String): Boolean {
