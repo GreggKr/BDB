@@ -3,9 +3,6 @@ package me.greggkr.bdb
 import com.natpryce.konfig.ConfigurationProperties
 import com.natpryce.konfig.EnvironmentVariables
 import com.oopsjpeg.osu4j.backend.Osu
-import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
-import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers
-import lavalink.client.io.jda.JdaLavalink
 import me.diax.comportment.jdacommand.CommandHandler
 import me.greggkr.bdb.db.Data
 import me.greggkr.bdb.db.Database
@@ -18,7 +15,6 @@ import net.dv8tion.jda.core.AccountType
 import net.dv8tion.jda.core.JDABuilder
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
 import java.io.File
-import java.net.URI
 import java.text.DecimalFormat
 
 typealias JDACCommandHandler = CommandHandler
@@ -47,27 +43,14 @@ val jda = JDABuilder(AccountType.BOT)
         .addEventListener(me.greggkr.bdb.handlers.CommandHandler(handler), ModLogHandler(), RestrictEventListener())
         .build()!!
 
-val playerManager = DefaultAudioPlayerManager()
-val lavaLink = JdaLavalink(config[Config.Bot.userId], 1) { jda }
-
 val starFormat = DecimalFormat("##.##")
 val ppFormat = DecimalFormat("######.##pp")
 val percentFormat = DecimalFormat("##.#%")
 val accuracyFormat = DecimalFormat("###.##%")
 val twoDecFormat = DecimalFormat("##.##")
 
-fun main(args: Array<String>) {
+fun main() {
     setIdeaIoUseFallback()
-    if (args.isNotEmpty()) {
-        if (args.contains("audio")) {
-            AudioSourceManagers.registerRemoteSources(playerManager)
-            lavaLink.addNode(URI(config[Config.Lavalink.ws]), config[Config.Lavalink.pwd])
-            jda.addEventListener(lavaLink)
-
-            playerManager.createPlayer()
-        }
-    }
-
     handler.registerCommands(CommandRegistry.commands)
     ScheduledMessager.start()
 }
