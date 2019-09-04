@@ -15,8 +15,7 @@ class Data(private val db: Database) {
     private val prefixes = HashMap<String, String>()
 
     private val owners = listOf(
-            184041169796333568, // Gregg
-            184733130123378688 // Landon
+            184041169796333568
     )
 
     fun isOwner(user: User) = owners.contains(user.idLong)
