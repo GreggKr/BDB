@@ -1,16 +1,21 @@
 package me.greggkr.bdb.handlers
 
+import com.google.common.base.Stopwatch
 import me.diax.comportment.jdacommand.CommandHandler
 import me.greggkr.bdb.data
+import me.greggkr.bdb.util.AnalysisResults
 import me.greggkr.bdb.util.Emoji
+import me.greggkr.bdb.util.analysisData
 import net.dv8tion.jda.core.Permission
 import net.dv8tion.jda.core.entities.ChannelType
 import net.dv8tion.jda.core.entities.MessageChannel
 import net.dv8tion.jda.core.entities.TextChannel
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent
 import net.dv8tion.jda.core.hooks.ListenerAdapter
+import java.util.concurrent.TimeUnit
 
 class CommandHandler(private val handler: CommandHandler) : ListenerAdapter() {
+    val stopwatch = Stopwatch.createUnstarted()
     override fun onMessageReceived(e: MessageReceivedEvent) {
         if (e.author.isBot || e.channelType != ChannelType.TEXT) return
 
@@ -59,6 +64,15 @@ class CommandHandler(private val handler: CommandHandler) : ListenerAdapter() {
             return
         }
 
+        stopwatch
+                .reset()
+                .start()
         handler.execute(cmd, e.message, if (args.size > 1) args[1] else "")
+        val elapsed  = stopwatch.elapsed()
+
+        val existing = analysisData.getOrDefault(cmd, mutableListOf())
+        existing.add(AnalysisResults(elapsed))
+
+        analysisData[cmd] = existing
     }
 }
