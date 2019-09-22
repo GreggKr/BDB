@@ -37,6 +37,6 @@ class AnalysisCommand : Command {
                 .mapToLong { it }
                 .average()
 
-        message.channel.sendMessage("That command takes an average of ${average.orElse(0.0)}ms over ${duration.size} runs to execute.").queue()
+        message.channel.sendMessage("That command takes an average of ${average.orElse(0.0).toInt()}ms over ${duration.size} runs to execute.").queue()
     }
 }

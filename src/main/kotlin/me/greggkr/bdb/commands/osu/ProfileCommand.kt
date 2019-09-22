@@ -22,6 +22,8 @@ class ProfileCommand : Command {
         val channel = message.channel
         val p = Osu.getUserArguments(message, args)
 
+        println("testt: $p")
+
         val inputUser = p.user ?: return
 
         val best = osu.userBests.getAsQuery(EndpointUserBests.ArgumentsBuilder(inputUser)
@@ -44,7 +46,7 @@ class ProfileCommand : Command {
 
         var playList = ""
 
-        for (i in 0 until pps.size) {
+        for (i in pps.indices) {
             val beatmap = best[i].beatmap.get()
             playList += "- ${ppFormat.format(pps[i])} | ${ranks[i]}, ${accuracyFormat.format(accuracies[i])}, [${beatmap.title} [${beatmap.version}]](https://osu.ppy.sh/b/${beatmap.id})${mods[i]}\n"
         }

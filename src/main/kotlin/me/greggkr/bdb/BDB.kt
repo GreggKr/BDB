@@ -1,5 +1,6 @@
 package me.greggkr.bdb
 
+import com.google.common.base.Stopwatch
 import com.natpryce.konfig.ConfigurationProperties
 import com.natpryce.konfig.EnvironmentVariables
 import com.oopsjpeg.osu4j.backend.Osu
@@ -14,8 +15,11 @@ import me.greggkr.bdb.util.ScheduledMessager
 import net.dv8tion.jda.core.AccountType
 import net.dv8tion.jda.core.JDABuilder
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.text.DecimalFormat
+import java.util.concurrent.TimeUnit
 
 typealias JDACCommandHandler = CommandHandler
 
@@ -49,8 +53,13 @@ val percentFormat = DecimalFormat("##.#%")
 val accuracyFormat = DecimalFormat("###.##%")
 val twoDecFormat = DecimalFormat("##.##")
 
+var startupTime: Long = 0
+
 fun main() {
+    val timer = Stopwatch.createStarted()
     setIdeaIoUseFallback()
     handler.registerCommands(CommandRegistry.commands)
     ScheduledMessager.start()
+    startupTime = timer.stop().elapsed(TimeUnit.MILLISECONDS)
+    LoggerFactory.getLogger("Main").info("Startup Time: ${startupTime}ms")
 }
