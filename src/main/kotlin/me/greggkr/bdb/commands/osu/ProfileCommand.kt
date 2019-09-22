@@ -1,7 +1,10 @@
 package me.greggkr.bdb.commands.osu
 
 import com.oopsjpeg.osu4j.GameMode
+import com.oopsjpeg.osu4j.OsuElement
 import com.oopsjpeg.osu4j.backend.EndpointUserBests
+import com.oopsjpeg.osu4j.backend.EndpointUsers
+import com.oopsjpeg.osu4j.exception.OsuAPIException
 import me.diax.comportment.jdacommand.Command
 import me.diax.comportment.jdacommand.CommandDescription
 import me.greggkr.bdb.accuracyFormat
@@ -34,22 +37,37 @@ class ProfileCommand : Command {
 
         val pps = best.map { it.pp }
         val ranks = best.map { Osu.prettyRank(it.rank) }
-        val mods = best.map { Osu.prettyMods(it.enabledMods)}
+        val mods = best.map { Osu.prettyMods(it.enabledMods) }
 
         val accuracies = best.map {
             getAcc(it.hit300, it.hit100, it.hit50, it.misses)
         }
 
-        val user = best[0].user.get()
+        var playList = ""
+
+
+
+        if (best.isNotEmpty()) {
+            for (i in pps.indices) {
+                val beatmap = best[i].beatmap.get()
+                playList += "- ${ppFormat.format(pps[i])} | ${ranks[i]}, ${accuracyFormat.format(accuracies[i])}, [${beatmap.title} [${beatmap.version}]](https://osu.ppy.sh/b/${beatmap.id})${mods[i]}\n"
+            }
+        } else {
+            playList = "That user does not have any registered plays. Maybe inactive?"
+        }
+
+        val user = try {
+            osu.users.getAsQuery(EndpointUsers.ArgumentsBuilder(inputUser)
+                    .setMode(GameMode.STANDARD)
+                    .build())
+                    .resolve()
+        } catch (e: Exception) {
+            channel.sendMessage("That user does not exist or is inactive.").queue()
+            return
+        }
         val userPp = user.ppRaw
         val userAcc = user.accuracy / 100.0
 
-        var playList = ""
-
-        for (i in pps.indices) {
-            val beatmap = best[i].beatmap.get()
-            playList += "- ${ppFormat.format(pps[i])} | ${ranks[i]}, ${accuracyFormat.format(accuracies[i])}, [${beatmap.title} [${beatmap.version}]](https://osu.ppy.sh/b/${beatmap.id})${mods[i]}\n"
-        }
 
         channel.sendMessage(EmbedBuilder()
                 .setColor(data.getColor(guild))
