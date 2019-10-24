@@ -7,7 +7,6 @@ import me.greggkr.bdb.commands.mod.BanCommand
 import me.greggkr.bdb.commands.mod.KickCommand
 import me.greggkr.bdb.commands.osu.*
 import me.greggkr.bdb.commands.owner.BlacklistUserCommand
-import me.greggkr.bdb.commands.owner.EvalCommand
 import me.greggkr.bdb.commands.owner.HerokuCommand
 import me.greggkr.bdb.nra.RestrictCommand
 

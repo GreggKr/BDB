@@ -94,7 +94,7 @@ class SettingsCommand : Command {
                             channel.sendMessage("${Emoji.X} Correct Usage: ${data.getPrefix(guild)}settings modlog all <true/false>").queue()
                             return
                         }
-                        val enabled = a[3].toBooleanLenient()
+                        val enabled = a[2].toBooleanLenient()
                         if (enabled == null) {
                             channel.sendMessage("${Emoji.X} Correct Usage: ${data.getPrefix(guild)}settings modlog all <true/false>").queue()
                             return

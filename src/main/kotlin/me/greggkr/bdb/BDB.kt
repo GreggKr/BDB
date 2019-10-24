@@ -15,7 +15,6 @@ import me.greggkr.bdb.util.ScheduledMessager
 import net.dv8tion.jda.core.AccountType
 import net.dv8tion.jda.core.JDABuilder
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.text.DecimalFormat

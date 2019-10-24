@@ -24,6 +24,7 @@ class Database(user: String,
             .addConnectionPoolListener(MongoConnectionPoolListener())
             .addServerListener(MongoServerListener())
             .build())
+//    private val client = MongoClients.create()
     private val database = client.getDatabase(dbName)
     private val updateOptions = UpdateOptions().upsert(true)
 
