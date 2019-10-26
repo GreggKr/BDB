@@ -6,7 +6,7 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import org.json.JSONObject
 
-private const val URL = "https://hastebin.com"
+private const val URL = "https://pastie.io/"
 
 object Hastebin {
     private val httpClient = OkHttpClient.Builder().build()
