@@ -153,12 +153,5 @@ class Osu {
 
             return tmp
         }
-
-        private fun makeRequest(req: Request): JsonElement? {
-            val res = client.newCall(req).execute()
-            val body = res.body() ?: return null
-
-            return gson.fromJson(body.string(), JsonElement::class.java)
-        }
     }
 }

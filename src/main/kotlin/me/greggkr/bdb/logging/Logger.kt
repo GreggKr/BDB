@@ -12,10 +12,10 @@ object Logger {
                 .setColor(data.getColor(guild))
                 .setTimestamp(OffsetDateTime.now())
 
-        if (!title.isEmpty()) embed.setTitle(title)
-        if (!thumbnail.isEmpty()) embed.setThumbnail(thumbnail)
-        if (!footer.isEmpty()) embed.setFooter(footer, null)
-        if (!description.isEmpty()) embed.setDescription(description)
+        if (title.isNotEmpty()) embed.setTitle(title)
+        if (thumbnail.isNotEmpty()) embed.setThumbnail(thumbnail)
+        if (footer.isNotEmpty()) embed.setFooter(footer, null)
+        if (description.isNotEmpty()) embed.setDescription(description)
 
         channel.sendMessage(embed.build()).queue()
     }
