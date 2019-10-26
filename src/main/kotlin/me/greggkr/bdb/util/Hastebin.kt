@@ -12,15 +12,19 @@ object Hastebin {
     private val httpClient = OkHttpClient.Builder().build()
 
     fun hastebin(text: String): String? {
-        val data = httpClient.newCall(
-                Request.Builder()
-                        .url("$URL/documents")
-                        .post(RequestBody.create(MediaType.parse("text/plain"), text))
-                        .build())
-                .execute()
-                .body()
-                ?.string()
+        return try {
+            val data = httpClient.newCall(
+                    Request.Builder()
+                            .url("$URL/documents")
+                            .post(RequestBody.create(MediaType.parse("text/plain"), text))
+                            .build())
+                    .execute()
+                    .body()
+                    ?.string()
 
-        return "$URL/${JSONObject(data)["key"]}"
+            "$URL/${JSONObject(data)["key"]}"
+        } catch (e: Exception) {
+            ""
+        }
     }
 }
