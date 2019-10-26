@@ -10,7 +10,8 @@ import net.dv8tion.jda.core.entities.Message
 @CommandDescription(name = "blacklist", triggers = [
     "blacklist"
 ], attributes = [
-    CommandAttribute(key = "botOwnerOnly")
+    CommandAttribute(key = "botOwnerOnly"),
+    CommandAttribute(key = "hideFromHelp")
 ], description = " Allows you to blacklist a user from using the bot.")
 class BlacklistUserCommand : Command {
     override fun execute(message: Message, args: String) {

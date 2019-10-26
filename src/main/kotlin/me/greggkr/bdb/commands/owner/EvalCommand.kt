@@ -16,7 +16,8 @@ import javax.script.ScriptException
 @CommandDescription(name = "eval", triggers = [
     "eval"
 ], attributes = [
-    CommandAttribute(key = "botOwnerOnly")
+    CommandAttribute(key = "botOwnerOnly"),
+    CommandAttribute(key = "hideFromHelp")
 ], description = "Evaluates a string.")
 class EvalCommand : Command {
     init {

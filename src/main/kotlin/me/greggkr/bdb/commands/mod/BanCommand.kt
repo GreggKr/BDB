@@ -13,7 +13,8 @@ import net.dv8tion.jda.core.entities.Message
 @CommandDescription(name = "ban", triggers = [
     "ban"
 ], attributes = [
-    CommandAttribute(key = "modOnly")
+    CommandAttribute(key = "modOnly"),
+    CommandAttribute(key = "hideFromHelp")
 ], description = "Allows you to ban people.")
 class BanCommand : Command {
     override fun execute(message: Message, args: String) {

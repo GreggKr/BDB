@@ -18,7 +18,8 @@ import java.awt.Color
 @CommandDescription(name = "settings", triggers = [
     "settings", "s"
 ], attributes = [
-    CommandAttribute(key = "adminOnly")
+    CommandAttribute(key = "adminOnly"),
+    CommandAttribute(key = "hideFromHelp")
 ], description = "Allows you to change guild-specific bot settings,")
 class SettingsCommand : Command {
     override fun execute(message: Message, args: String) {

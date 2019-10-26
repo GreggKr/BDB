@@ -15,7 +15,7 @@ class HelpCommand : Command {
     override fun execute(message: Message, args: String) {
         val sb = StringBuilder()
         CommandRegistry.commands
-                .filter { !it.hasAttribute("botOwnerOnly") }
+                .filter { !it.hasAttribute("hideFromHelp") }
                 .forEach { sb.append(it.description.name).append("\n") }
 
         message.channel.sendMessage(EmbedBuilder()

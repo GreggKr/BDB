@@ -13,7 +13,8 @@ import net.dv8tion.jda.core.entities.Message
 @CommandDescription(name = "kick", triggers = [
     "kick"
 ], attributes = [
-    CommandAttribute(key = "modOnly")
+    CommandAttribute(key = "modOnly"),
+    CommandAttribute(key = "hideFromHelp")
 ], description = "Allows you to kick people.")
 class KickCommand : Command {
     override fun execute(message: Message, args: String) {
