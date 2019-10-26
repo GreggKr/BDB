@@ -26,7 +26,16 @@ object CommandRegistry {
                 RestrictCommand(),
 
                 /* OSU */
+                CompositionCommand(),
                 MultiCommand(),
+                ProfileCommand(),
+                RecentBestCommand(),
+                RecentCommand(),
+                SpreadCommand(),
+                TopAccCommand(),
+                TopPlaysCommand(),
+                UserCommand(),
+                UsernameCommand(),
 
                 /* OWNER */
                 BlacklistUserCommand(),
@@ -35,22 +44,10 @@ object CommandRegistry {
 
                 /* INFO */
                 AboutCommand(),
-                HelpCommand(),
-                TwitchCommand(),
-
+                AnalysisCommand(),
                 DabbyCommand(),
-
-                /* REDO LOL */
-                UsernameCommand(),
-                TopPlaysCommand(),
-                SpreadCommand(),
-                CompositionCommand(),
-                ProfileCommand(),
-                TopAccCommand(),
-                RecentCommand(),
-                RecentBestCommand(),
-                UserCommand(),
-                AnalysisCommand()
+                HelpCommand(),
+                TwitchCommand()
         )
     }
 
