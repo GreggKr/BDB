@@ -24,7 +24,8 @@ object Hastebin {
 
             "$URL/${JSONObject(data)["key"]}"
         } catch (e: Exception) {
-            ""
+            e.printStackTrace()
+            null
         }
     }
 }
