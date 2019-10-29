@@ -17,35 +17,12 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 
-private val API_KEY = config[Config.Osu.apiKey]
-
-private val gson = GsonBuilder().create()
-private val client = OkHttpClient.Builder()
-        .authenticator { _, response ->
-            response
-                    .request()
-                    .newBuilder()
-                    .url(response
-                            .request()
-                            .url()
-                            .newBuilder()
-                            .addQueryParameter("k", API_KEY)
-                            .build()
-                    ).build()
-        }
-        .build()
-
-enum class UserType(val apiName: String) {
-    ID("id"), USERNAME("string")
-}
-
 data class OsuUserArguments(val user: String?,
                             val params: List<String>
 )
 
 class Osu {
     companion object {
-
         fun prettyMods(mods: Array<GameMod>): String {
             return if (mods.isEmpty()) {
                 ""
@@ -91,8 +68,8 @@ class Osu {
 
         fun playTitle(score: OsuScore): String {
             val map = score.beatmap.get()
-            val mods = Osu.prettyMods(score.enabledMods)
-            val timeInfo = Osu.prettyTime(score)
+            val mods = prettyMods(score.enabledMods)
+            val timeInfo = prettyTime(score)
 
             return "${map.title} [${map.version}] $mods - ${starFormat.format(map.difficulty)}* ($timeInfo)"
         }
@@ -106,8 +83,8 @@ class Osu {
             var user = ""
 
             if (!a.isNullOrEmpty()) {
-                if (!a[0].isEmpty()) {
-                    if (a[0].contains("@") && !message.mentionedUsers.isEmpty()) {
+                if (a[0].isNotEmpty()) {
+                    if (a[0].contains("@") && message.mentionedUsers.isNotEmpty()) {
                         val mentionedUser = data.getOsuUser(guild, message.mentionedUsers[0])
                         if (!mentionedUser.isNullOrEmpty()) {
                             user = mentionedUser
