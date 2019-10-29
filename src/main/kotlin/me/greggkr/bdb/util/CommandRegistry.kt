@@ -6,8 +6,6 @@ import me.greggkr.bdb.commands.info.AboutCommand
 import me.greggkr.bdb.commands.info.AnalysisCommand
 import me.greggkr.bdb.commands.info.DabbyCommand
 import me.greggkr.bdb.commands.info.HelpCommand
-import me.greggkr.bdb.commands.mod.BanCommand
-import me.greggkr.bdb.commands.mod.KickCommand
 import me.greggkr.bdb.commands.osu.*
 import me.greggkr.bdb.commands.owner.BlacklistUserCommand
 import me.greggkr.bdb.commands.owner.HerokuCommand
@@ -20,10 +18,6 @@ object CommandRegistry {
         register(
                 /* ADMIN */
                 SettingsCommand(),
-
-                /* MOD */
-                BanCommand(),
-                KickCommand(),
 
                 /* NRA */
                 RestrictCommand(),
