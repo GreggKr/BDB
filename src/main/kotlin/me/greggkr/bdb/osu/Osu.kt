@@ -14,6 +14,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.time.Duration
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.*
 
 private val API_KEY = config[Config.Osu.apiKey]
 
@@ -57,12 +59,14 @@ class Osu {
         }
 
         fun prettyTime(score: OsuScore): String {
-            val duration = Duration.between(score.date.toOffsetDateTime().toLocalDateTime(), LocalDateTime.now())
+            val currentTime = LocalDateTime.now(ZoneId.of(TimeZone.getTimeZone("UTC").id))
+            val playTime = score.date.toOffsetDateTime().toLocalDateTime()
 
+            val duration = Duration.between(playTime, currentTime)
             val days = duration.toDays()
             val hours = duration.minusDays(days).toHours()
             val minutes = duration.minusHours(hours).toMinutes()
-            val seconds = duration.minusMinutes(minutes).toMillis() * 1000 // very annoying
+            val seconds = duration.minusMinutes(minutes).seconds
 
             var timeInfo = ""
 
@@ -74,7 +78,7 @@ class Osu {
             timeInfo += if (hours > 0) {
                 if (hours > 1) "$hours hours "
                 else "one hour "
-            } else if (minutes > 0 ) {
+            } else if (minutes > 0) {
                 if (minutes > 1) "$minutes minutes "
                 else "one minute "
             } else {
