@@ -2,7 +2,10 @@ package me.greggkr.bdb.util
 
 import me.diax.comportment.jdacommand.Command
 import me.greggkr.bdb.commands.admin.SettingsCommand
-import me.greggkr.bdb.commands.info.*
+import me.greggkr.bdb.commands.info.AboutCommand
+import me.greggkr.bdb.commands.info.AnalysisCommand
+import me.greggkr.bdb.commands.info.DabbyCommand
+import me.greggkr.bdb.commands.info.HelpCommand
 import me.greggkr.bdb.commands.mod.BanCommand
 import me.greggkr.bdb.commands.mod.KickCommand
 import me.greggkr.bdb.commands.osu.*
@@ -46,8 +49,7 @@ object CommandRegistry {
                 AboutCommand(),
                 AnalysisCommand(),
                 DabbyCommand(),
-                HelpCommand(),
-                TwitchCommand()
+                HelpCommand()
         )
     }
 
