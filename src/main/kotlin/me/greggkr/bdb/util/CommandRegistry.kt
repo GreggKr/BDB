@@ -9,6 +9,7 @@ import me.greggkr.bdb.commands.info.HelpCommand
 import me.greggkr.bdb.commands.osu.*
 import me.greggkr.bdb.commands.owner.BlacklistUserCommand
 import me.greggkr.bdb.commands.owner.HerokuCommand
+import me.greggkr.bdb.commands.owner.LeaveServerCommand
 import me.greggkr.bdb.nra.RestrictCommand
 
 object CommandRegistry {
@@ -38,6 +39,7 @@ object CommandRegistry {
                 BlacklistUserCommand(),
 //                EvalCommand(),
                 HerokuCommand(),
+                LeaveServerCommand(),
 
                 /* INFO */
                 AboutCommand(),
